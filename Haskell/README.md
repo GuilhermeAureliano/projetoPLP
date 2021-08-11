@@ -1,2 +1,2 @@
-# projetoPLP
-Projeto de Paradigmas de linguagens de Programação.
+# Paradigma Funcional
+Projeto em Haskell utilizando o paradigma funcional.
