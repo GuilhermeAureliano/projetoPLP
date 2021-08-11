@@ -7,5 +7,7 @@ lerEntradaString = do
     return x
 
 ehCpfValido :: String -> Bool
-ehCpfValido cpf | length cpf /= 11 = False
-                | otherwise = all (`elem` ['0'..'9']) cpf
+ehCpfValido cpf = True 
+---- Comentado para aceitar qualquer número por enquanto
+---ehCpfValido cpf | length cpf /= 11 = False
+ ---               | otherwise = all (`elem` ['0'..'9']) cpf

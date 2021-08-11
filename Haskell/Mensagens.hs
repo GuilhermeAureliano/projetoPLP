@@ -2,15 +2,15 @@ module Mensagens where
 import System.IO
 import Util
 
-putMensagem :: IO ()
-putMensagem = do
+mensagemInicial :: IO ()
+mensagemInicial = do
     arq <- openFile "arquivos/mensagem.txt" ReadMode
     conteudo <- hGetContents arq
     putStrLn conteudo
     hClose arq
 
-putOpcoesMenu :: IO ()
-putOpcoesMenu = do
+menuPrincipal :: IO ()
+menuPrincipal = do
     putStrLn("       ----MENU PRINCIPAL----")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Login como cliente")
@@ -18,8 +18,8 @@ putOpcoesMenu = do
     putStrLn("[3] Cadastro de usuário")
     putStrLn("[4] Sair\n")
 
-putMsgOpcaoInvalida :: IO()
-putMsgOpcaoInvalida = do
+opcaoInvalida :: IO()
+opcaoInvalida = do
      putStrLn("\nError: OPÇÃO INVÁLIDA")
 
 putMsgTeclaEnter :: IO ()
@@ -28,20 +28,20 @@ putMsgTeclaEnter = do
     opcao <- Util.lerEntradaString
     putStr("")
 
-putMsgSaida :: IO()
-putMsgSaida = do
+mensagemDeSaida :: IO()
+mensagemDeSaida = do
     putStrLn("\nHasta La Vista...E volte sempre!")
 
-putMsgLoginCliente :: IO()
-putMsgLoginCliente = do
+loginDoCliente :: IO()
+loginDoCliente = do
     putStrLn("       -----LOGIN CLIENTE----\n")
     putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")
     putStrLn("Olá, senhor(a)!")
 
     putStr("Por favor, informe o seu CPF: ")
 
-putMsgOpcoesMenuCliente :: String -> IO()
-putMsgOpcoesMenuCliente nome = do
+menuDoCliente :: String -> IO()
+menuDoCliente nome = do
     putStrLn("\nOlá, " ++ nome ++ "!")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Listar vagas disponíveis")
@@ -51,22 +51,18 @@ putMsgOpcoesMenuCliente nome = do
     putStrLn("[5] Adicionar serviço extra de lava jato e cera")
     putStrLn("[6] Voltar ao menu principal\n")
 
-putMsgUserInvalido :: IO()
-putMsgUserInvalido = do
+usuarioInvalido :: IO()
+usuarioInvalido = do
     putStrLn("\nErro: usuário não cadastrado!")
     putMsgTeclaEnter
-    opcao <- Util.lerEntradaString
-    putStr("")
 
-putMsgCpfInvalido :: IO()
-putMsgCpfInvalido = do
+cpfInvalido :: IO()
+cpfInvalido = do
     putStrLn("\nErro: CPF inválido!")
     putMsgTeclaEnter
-    opcao <- Util.lerEntradaString
-    putStr("")
 
-putMsgOpcoesMenuAdmin :: IO()
-putMsgOpcoesMenuAdmin = do
+menuAdministrador :: IO()
+menuAdministrador = do
     putStrLn("       -----ADMINISTRADOR----")
     putStrLn("\nOlá, Administrador!")
     putStrLn("\nComo deseja prosseguir?")
@@ -75,3 +71,17 @@ putMsgOpcoesMenuAdmin = do
     putStrLn("[3] Gerenciar clientes")
     putStrLn("[4] Calcular valor do estacionamento")
     putStrLn("[5] Voltar ao menu principal\n")
+
+cadastrarNome :: IO()
+cadastrarNome = do
+    putStrLn("       -----CADASTRO DE USUÁRIO----")
+    putStrLn("Informe seu nome: ")
+
+cadastrarCpf :: IO()
+cadastrarCpf = do
+    putStrLn("Agora digite seu CPF: ")
+
+cadastrarPlaca :: IO()
+cadastrarPlaca = do
+    putStrLn("Para concluir o cadastro informe a placa do veículo...")
+    putStr("Placa: ")
