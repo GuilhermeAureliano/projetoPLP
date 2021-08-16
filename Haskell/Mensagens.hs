@@ -68,6 +68,7 @@ menuAdministrador = do
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Cadastrar cliente")
     putStrLn("[2] Exibir lista das vagas disponíveis")
+    putStrLn("[3] Exibir clientes cadastrados")
     putStrLn("[3] Gerenciar clientes")
     putStrLn("[4] Calcular valor do estacionamento")
     putStrLn("[5] Voltar ao menu principal\n")

@@ -55,4 +55,5 @@ cadastrarUsuario = do
         else do
             Mensagens.cadastrarPlaca
             placa <- Util.lerEntradaString
-            main
+            let clienteStr = nome ++ "," ++ cpf ++ "," ++ placa ++ "," ++ " " ++ "\n"
+            appendFile "arquivos/clientes.txt" (clienteStr)
