@@ -11,7 +11,7 @@ mensagemInicial = do
 
 menuPrincipal :: IO ()
 menuPrincipal = do
-    putStrLn("       ----MENU PRINCIPAL----")
+    putStrLn("       -----MENU PRINCIPAL-----")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Login como cliente")
     putStrLn("[2] Login como funcionário")
@@ -34,10 +34,8 @@ mensagemDeSaida = do
 
 loginDoCliente :: IO()
 loginDoCliente = do
-    putStrLn("       -----LOGIN CLIENTE----\n")
-    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")
+    putStrLn("       -----LOGIN CLIENTE-----\n")
     putStrLn("Olá, senhor(a)!")
-
     putStr("Por favor, informe o seu CPF: ")
 
 menuDoCliente :: String -> IO()
@@ -63,7 +61,7 @@ cpfInvalido = do
 
 menuFuncionario :: IO()
 menuFuncionario = do
-    putStrLn("       -----FUNCIONÁRIO----")
+    putStrLn("       -----FUNCIONÁRIO-----")
     putStrLn("\nOlá, funcionário!")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Cadastrar cliente")
@@ -75,7 +73,7 @@ menuFuncionario = do
 
 cadastrarNome :: IO()
 cadastrarNome = do
-    putStrLn("       -----CADASTRO DE USUÁRIO----")
+    putStrLn("       -----CADASTRO DE USUÁRIO-----")
     putStrLn("Informe seu nome: ")
 
 cadastrarCpf :: IO()
@@ -89,6 +87,7 @@ cadastrarPlaca = do
 
 exibirListaVagas :: IO()
 exibirListaVagas = do
+    putStrLn("       -----VAGAS DISPONÍVEIS-----\n")
     arq <- openFile "arquivos/vagas.txt" ReadMode
     conteudo <- hGetContents arq
     putStrLn conteudo
@@ -97,6 +96,7 @@ exibirListaVagas = do
 
 exibirListaClientesCadastrados :: IO()
 exibirListaClientesCadastrados = do
+    putStrLn("       -----CLIENTES CADASTRADOS-----\n")
     arq <- openFile "arquivos/clientes.txt" ReadMode
     conteudo <- hGetContents arq
     putStrLn conteudo
