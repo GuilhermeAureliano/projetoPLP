@@ -1,4 +1,3 @@
-Guilherme Aureliano,12345678900,
-Naruto Uchiha,09876543211,ABC-123, 
-Tommy Shelby,10293847560,SHELBY-00, 
-Fulano,12345678977,BCK-123, 
+Guilherme Aureliano,12345678900,BCD-123,15:00
+Naruto Uchiha,09876543211,ABC-123,21:00
+

@@ -14,13 +14,13 @@ menuPrincipal = do
     putStrLn("       ----MENU PRINCIPAL----")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Login como cliente")
-    putStrLn("[2] Login como administrador")
-    putStrLn("[3] Cadastro de usuário")
+    putStrLn("[2] Login como funcionário")
+    putStrLn("[3] Login como dono")
     putStrLn("[4] Sair\n")
 
 opcaoInvalida :: IO()
 opcaoInvalida = do
-     putStrLn("\nError: OPÇÃO INVÁLIDA")
+     putStrLn("\nError: OPÇÃO INVÁLIDA\n")
 
 putMsgTeclaEnter :: IO ()
 putMsgTeclaEnter = do
@@ -61,17 +61,17 @@ cpfInvalido = do
     putStrLn("\nErro: CPF inválido!")
     putMsgTeclaEnter
 
-menuAdministrador :: IO()
-menuAdministrador = do
-    putStrLn("       -----ADMINISTRADOR----")
-    putStrLn("\nOlá, Administrador!")
+menuFuncionario :: IO()
+menuFuncionario = do
+    putStrLn("       -----FUNCIONÁRIO----")
+    putStrLn("\nOlá, funcionário!")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Cadastrar cliente")
     putStrLn("[2] Exibir lista das vagas disponíveis")
     putStrLn("[3] Exibir clientes cadastrados")
-    putStrLn("[3] Gerenciar clientes")
-    putStrLn("[4] Calcular valor do estacionamento")
-    putStrLn("[5] Voltar ao menu principal\n")
+    putStrLn("[4] Gerenciar clientes")
+    putStrLn("[5] Calcular valor do estacionamento")
+    putStrLn("[6] Voltar ao menu principal\n")
 
 cadastrarNome :: IO()
 cadastrarNome = do
@@ -86,3 +86,19 @@ cadastrarPlaca :: IO()
 cadastrarPlaca = do
     putStrLn("Para concluir o cadastro informe a placa do veículo...")
     putStr("Placa: ")
+
+exibirListaVagas :: IO()
+exibirListaVagas = do
+    arq <- openFile "arquivos/vagas.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
+    putStr "\n"
+
+exibirListaClientesCadastrados :: IO()
+exibirListaClientesCadastrados = do
+    arq <- openFile "arquivos/clientes.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
+    putStr "\n"
