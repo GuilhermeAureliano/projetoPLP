@@ -14,6 +14,8 @@ loginFuncionario = do
         then do {Mensagens.exibirListaVagas; loginFuncionario}
     else if op == "3"
         then do {Mensagens.exibirListaClientesCadastrados; loginFuncionario}
+    else if op == "5"
+        then do return()
     else if op == "6"
         then do return()
     else do
@@ -31,6 +33,12 @@ cadastrarCliente = do
     else do
         Mensagens.cadastrarPlaca
         placa <- Util.lerEntradaString
-        let clienteStr = nome ++ "," ++ cpf ++ "," ++ placa ++ "," ++ " " ++ "\n"
+        let clienteStr = cpf ++ "," ++ nome ++ "," ++ placa ++ "," ++ " " ++ "\n"
         appendFile "arquivos/clientes.txt" (clienteStr)
+
+        Mensagens.cadastraHorario
+        horario <- Util.lerEntradaString
+        let horaCpf = cpf ++ "," ++ horario ++ "\n"
+        appendFile "arquivos/horario-cpf.txt" (horaCpf)
+        
         loginFuncionario

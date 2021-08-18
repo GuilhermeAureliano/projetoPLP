@@ -1,6 +1,7 @@
 module Mensagens where
-import System.IO
 import Util
+import Data.List
+import System.IO
 
 mensagemInicial :: IO ()
 mensagemInicial = do
@@ -13,7 +14,7 @@ menuPrincipal :: IO ()
 menuPrincipal = do
     putStrLn("       -----MENU PRINCIPAL-----")
     putStrLn("\nComo deseja prosseguir?")
-    putStrLn("[1] Login como cliente")
+    putStrLn("[1] Área do Cliente")
     putStrLn("[2] Login como funcionário")
     putStrLn("[3] Login como dono")
     putStrLn("[4] Sair\n")
@@ -38,9 +39,9 @@ loginDoCliente = do
     putStrLn("Olá, senhor(a)!")
     putStr("Por favor, informe o seu CPF: ")
 
-menuDoCliente :: String -> IO()
-menuDoCliente nome = do
-    putStrLn("\nOlá, " ++ nome ++ "!")
+menuDoCliente :: IO()
+menuDoCliente = do
+    putStrLn("\nOlá, Cliente!")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Listar vagas disponíveis")
     putStrLn("[2] Escolher vaga")
@@ -61,7 +62,7 @@ cpfInvalido = do
 
 menuFuncionario :: IO()
 menuFuncionario = do
-    putStrLn("       -----FUNCIONÁRIO-----")
+    putStrLn("\n       -----FUNCIONÁRIO-----")
     putStrLn("\nOlá, funcionário!")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Cadastrar cliente")
@@ -74,16 +75,19 @@ menuFuncionario = do
 cadastrarNome :: IO()
 cadastrarNome = do
     putStrLn("       -----CADASTRO DE USUÁRIO-----")
-    putStrLn("Informe seu nome: ")
+    putStr("Informe o nome: ")
 
 cadastrarCpf :: IO()
 cadastrarCpf = do
-    putStrLn("Agora digite seu CPF: ")
+    putStr("Informe o CPF: ")
 
 cadastrarPlaca :: IO()
 cadastrarPlaca = do
-    putStrLn("Para concluir o cadastro informe a placa do veículo...")
-    putStr("Placa: ")
+    putStr("Informe a placa do veículo: ")
+
+cadastraHorario :: IO()
+cadastraHorario = do
+    putStr("Por fim, o horário de entrada: ")
 
 exibirListaVagas :: IO()
 exibirListaVagas = do
@@ -97,8 +101,7 @@ exibirListaVagas = do
 exibirListaClientesCadastrados :: IO()
 exibirListaClientesCadastrados = do
     putStrLn("       -----CLIENTES CADASTRADOS-----\n")
-    arq <- openFile "arquivos/clientes.txt" ReadMode
-    conteudo <- hGetContents arq
-    putStrLn conteudo
-    hClose arq
-    putStr "\n"
+    arq <- readFile "arquivos/clientes.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+    
+    print lista

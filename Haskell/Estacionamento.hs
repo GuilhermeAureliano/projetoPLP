@@ -6,3 +6,6 @@ ehCliente cpf = Cliente.ehCliente cpf
 
 getNomeCliente :: String -> String
 getNomeCliente cpf = Cliente.getNome cpf
+
+calcularValor :: String -> String
+calcularValor horario = horario
