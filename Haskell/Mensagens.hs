@@ -105,3 +105,31 @@ exibirListaClientesCadastrados = do
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
     
     print lista
+
+menuDono :: IO()
+menuDono = do
+    putStrLn("       -----DONO-----\n")
+    putStrLn("Oi, chefinho!")
+
+    putStrLn("\nComo deseja prosseguir?")
+    putStrLn("[1] Cadastrar funcionário")
+    putStrLn("[2] Gerenciar funcionários")
+    putStrLn("[3] Gerenciar finanças")
+    putStrLn("[4] Visualizar funcionários ativos")
+    putStrLn("[5] Visualizar clientes ativos")
+    putStrLn("[6] Voltar ao menu principal\n")
+
+
+exibirListaFuncionariosCadastrados :: IO()
+exibirListaFuncionariosCadastrados = do
+    putStrLn("       -----FUNCIONARIOS CADASTRADOS-----\n")
+    arq <- readFile "arquivos/funcionarios.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+    
+    print lista
+
+
+ehFuncionario :: IO()
+ehFuncionario = do
+    putStr("Informe seu CPF para fazer o login: ")
+    

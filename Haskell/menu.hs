@@ -1,5 +1,6 @@
 import ControllerCliente
 import ControllerFuncionario
+import ControllerDono
 import Util
 import Mensagens
 import Estacionamento
@@ -15,6 +16,7 @@ main = do
 
 escolheOpcao :: String -> IO()
 escolheOpcao opcao | opcao == "1" = ControllerCliente.loginCliente
-				   | opcao == "2" = ControllerFuncionario.loginFuncionario
+				   | opcao == "2" = ControllerFuncionario.verificaFuncioanrio
+				   | opcao == "3" = ControllerDono.verificaDono
 				   | opcao == "4" = Mensagens.mensagemDeSaida
                    | otherwise = do {Mensagens.opcaoInvalida; main}

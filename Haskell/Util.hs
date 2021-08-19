@@ -19,10 +19,18 @@ wordsWhen p s =  case dropWhile p s of
                       s' -> w : wordsWhen p s''
                             where (w, s'') = break p s'
 
-ehCliente :: String -> [[String]] -> Bool
-ehCliente _ [[]] = False
-ehCliente c (x:xs) | ((headCliente c x) == False) = ehCliente c xs
+ehCadastrado :: String -> [[String]] -> Bool
+ehCadastrado _ [[]] = False
+ehCadastrado c (x:xs) | ((headCadastrado c x) == False) = ehCadastrado c xs
                    | otherwise = True
 
-headCliente :: String -> [String] -> Bool
-headCliente c (x:xs) = (c == x)
+headCadastrado :: String -> [String] -> Bool
+headCadastrado c (x:xs) = (c == x)
+
+opcaoVaga :: String -> [[String]] -> [[String]]
+opcaoVaga _ [] = []
+opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
+                   | otherwise = x:opcaoVaga v xs
+
+aux :: String -> [String] -> Bool
+aux v (x:xs) = (v == x)

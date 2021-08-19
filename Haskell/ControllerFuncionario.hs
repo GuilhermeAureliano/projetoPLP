@@ -3,6 +3,20 @@ import Util
 import Mensagens
 import Estacionamento
 import Cliente
+import Data.List
+
+verificaFuncioanrio :: IO()
+verificaFuncioanrio = do
+    Mensagens.ehFuncionario
+    cpf <- Util.lerEntradaString
+     
+    arq <- readFile "arquivos/funcionarios.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+
+    if (Util.ehCadastrado cpf lista)
+        then do {putStr("\nBem vindo de volta!\n"); loginFuncionario}
+    else do
+        return ()
 
 loginFuncionario :: IO()
 loginFuncionario = do
