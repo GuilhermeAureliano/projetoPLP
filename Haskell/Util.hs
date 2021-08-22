@@ -1,5 +1,6 @@
 module Util where
-import System.IO.Unsafe
+import System.IO
+import Data.List 
 
 lerEntradaString :: IO String
 lerEntradaString = do
@@ -20,7 +21,7 @@ wordsWhen p s =  case dropWhile p s of
                             where (w, s'') = break p s'
 
 ehCadastrado :: String -> [[String]] -> Bool
-ehCadastrado _ [[]] = False
+ehCadastrado _ [] = False
 ehCadastrado c (x:xs) | ((headCadastrado c x) == False) = ehCadastrado c xs
                    | otherwise = True
 
@@ -34,3 +35,34 @@ opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
 
 aux :: String -> [String] -> Bool
 aux v (x:xs) = (v == x)
+
+escolheVaga :: IO()
+escolheVaga = do
+
+    arq <- readFile "arquivos/vagas.txt"
+
+    let lista = ((Data.List.map (wordsWhen(==',') ) (lines arq)))
+    
+    if lista == []
+        then do print ("Não há vagas!!!!")
+    else
+        do
+
+    print(lista)
+    input <- lerEntradaString
+    let lista2 = opcaoVaga (input) lista
+
+    let n = primeira (lista2)
+    escreverArq (primeira (lista2))
+
+escreverArq :: String -> IO()
+escreverArq n = do
+
+    arq <- openFile "arquivos/vagas.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+primeira :: [[String]] -> String
+primeira [] = ""
+primeira (x:xs) = head x ++ "," ++ "\n" ++ primeira xs

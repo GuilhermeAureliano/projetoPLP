@@ -89,6 +89,10 @@ cadastraHorario :: IO()
 cadastraHorario = do
     putStr("Por fim, o horário de entrada: ")
 
+horaDeSaida :: IO()
+horaDeSaida = do
+    putStr("Hora de saída: ")
+
 exibirListaVagas :: IO()
 exibirListaVagas = do
     putStrLn("       -----VAGAS DISPONÍVEIS-----\n")
@@ -132,4 +136,4 @@ exibirListaFuncionariosCadastrados = do
 ehFuncionario :: IO()
 ehFuncionario = do
     putStr("Informe seu CPF para fazer o login: ")
-    
+

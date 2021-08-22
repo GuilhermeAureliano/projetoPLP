@@ -14,5 +14,6 @@ loginCliente = do
 
 opcoesCliente :: String -> IO()
 opcoesCliente opcao | opcao == "1" = Mensagens.exibirListaVagas
+                    | opcao == "2" = Util.escolheVaga
                     | otherwise = do {Mensagens.opcaoInvalida; loginCliente}
 
