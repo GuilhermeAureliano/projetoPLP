@@ -1,2 +1,6 @@
-12,Jose,
-13,Armando,
+12,Jose
+13,Armando
+10,Neymar
+7,Mbappe
+11,Di Maria
+8585,Manu

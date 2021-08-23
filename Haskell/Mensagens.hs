@@ -23,24 +23,13 @@ opcaoInvalida :: IO()
 opcaoInvalida = do
      putStrLn("\nError: OPÇÃO INVÁLIDA\n")
 
-putMsgTeclaEnter :: IO ()
-putMsgTeclaEnter = do
-    putStrLn("\nPressione a tecla ENTER para voltar!")
-    opcao <- Util.lerEntradaString
-    putStr("")
-
 mensagemDeSaida :: IO()
 mensagemDeSaida = do
     putStrLn("\nHasta La Vista...E volte sempre!")
 
-loginDoCliente :: IO()
-loginDoCliente = do
-    putStrLn("       -----LOGIN CLIENTE-----\n")
-    putStrLn("Olá, senhor(a)!")
-    putStr("Por favor, informe o seu CPF: ")
-
 menuDoCliente :: IO()
 menuDoCliente = do
+    putStrLn("\n       -----ÁREA DO CLIENTE-----")
     putStrLn("\nOlá, Cliente!")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Listar vagas disponíveis")
@@ -48,17 +37,23 @@ menuDoCliente = do
     putStrLn("[3] Recomendação de vaga do Estacionamento")
     putStrLn("[4] Assinar contrato de exclusividade")
     putStrLn("[5] Adicionar serviço extra de lava jato e cera")
-    putStrLn("[6] Voltar ao menu principal\n")
+    putStrLn("[6] Sair do sistema\n")
 
 usuarioInvalido :: IO()
 usuarioInvalido = do
     putStrLn("\nErro: usuário não cadastrado!")
-    putMsgTeclaEnter
+
+usuarioCadastrado :: IO()
+usuarioCadastrado = do
+    putStrLn("\nErro: usuário já cadastrado!")
+
+usuarioVagaOcupada :: IO()
+usuarioVagaOcupada = do
+    putStrLn("\nErro: usuário já está ocupando uma vaga!")
 
 cpfInvalido :: IO()
 cpfInvalido = do
     putStrLn("\nErro: CPF inválido!")
-    putMsgTeclaEnter
 
 menuFuncionario :: IO()
 menuFuncionario = do
@@ -70,24 +65,24 @@ menuFuncionario = do
     putStrLn("[3] Exibir clientes cadastrados")
     putStrLn("[4] Gerenciar clientes")
     putStrLn("[5] Calcular valor do estacionamento")
-    putStrLn("[6] Voltar ao menu principal\n")
+    putStrLn("[6] Sair do sistema\n")
 
 cadastrarNome :: IO()
 cadastrarNome = do
-    putStrLn("       -----CADASTRO DE USUÁRIO-----")
-    putStr("Informe o nome: ")
+    putStrLn("\n       -----CADASTRO DE USUÁRIO-----")
+    putStr("\nInforme o nome: ")
 
-cadastrarCpf :: IO()
-cadastrarCpf = do
+informeCpf :: IO()
+informeCpf = do
     putStr("Informe o CPF: ")
 
 cadastrarPlaca :: IO()
 cadastrarPlaca = do
     putStr("Informe a placa do veículo: ")
 
-cadastraHorario :: IO()
-cadastraHorario = do
-    putStr("Por fim, o horário de entrada: ")
+cadastraHorarioEntrada :: IO()
+cadastraHorarioEntrada = do
+    putStr("Por fim, o horário de entrada(números): ")
 
 horaDeSaida :: IO()
 horaDeSaida = do
@@ -96,24 +91,32 @@ horaDeSaida = do
 exibirListaVagas :: IO()
 exibirListaVagas = do
     putStrLn("       -----VAGAS DISPONÍVEIS-----\n")
-    arq <- openFile "arquivos/vagas.txt" ReadMode
-    conteudo <- hGetContents arq
-    putStrLn conteudo
-    hClose arq
-    putStr "\n"
+    ---arq <- openFile "arquivos/vagas.txt" ReadMode
+    ---conteudo <- hGetContents arq
+    ---putStrLn conteudo
+    ---hClose arq
+
+    arq <- readFile "arquivos/vagas.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+    print lista
+
 
 exibirListaClientesCadastrados :: IO()
 exibirListaClientesCadastrados = do
     putStrLn("       -----CLIENTES CADASTRADOS-----\n")
-    arq <- readFile "arquivos/clientes.txt"
-    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-    
-    print lista
+    ---arq <- readFile "arquivos/clientes.txt"
+    ---let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+    ---print lista
+
+    arq <- openFile "arquivos/clientes.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
 
 menuDono :: IO()
 menuDono = do
-    putStrLn("       -----DONO-----\n")
-    putStrLn("Oi, chefinho!")
+    putStrLn("\n       -----DONO-----")
+    putStrLn("\nOi, chefinho!")
 
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Cadastrar funcionário")
@@ -121,19 +124,30 @@ menuDono = do
     putStrLn("[3] Gerenciar finanças")
     putStrLn("[4] Visualizar funcionários ativos")
     putStrLn("[5] Visualizar clientes ativos")
-    putStrLn("[6] Voltar ao menu principal\n")
+    putStrLn("[6] Sair do sistema\n")
 
 
 exibirListaFuncionariosCadastrados :: IO()
 exibirListaFuncionariosCadastrados = do
     putStrLn("       -----FUNCIONARIOS CADASTRADOS-----\n")
-    arq <- readFile "arquivos/funcionarios.txt"
-    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-    
-    print lista
+    ---arq <- readFile "arquivos/funcionarios.txt"
+    ---let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+    ---print lista
 
+    arq <- openFile "arquivos/funcionarios.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
 
 ehFuncionario :: IO()
 ehFuncionario = do
-    putStr("Informe seu CPF para fazer o login: ")
+    putStr("\nInforme seu CPF para fazer o login: ")
 
+valorPago :: String -> [[String]] -> IO()
+valorPago cpf lista2 = do
+
+    putStr("O valor a ser pago em REAIS pelo cliente " ++ Util.getNome cpf lista2 ++ " é: ")
+
+cadastradoEfetuado :: IO()
+cadastradoEfetuado = do
+    putStr("\nCADASTRADO EFETUADO COM SUCESSO!")

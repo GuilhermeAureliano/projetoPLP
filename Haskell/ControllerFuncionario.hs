@@ -5,8 +5,8 @@ import Estacionamento
 import Cliente
 import Data.List
 
-verificaFuncioanrio :: IO()
-verificaFuncioanrio = do
+verificaFuncionario :: IO()
+verificaFuncionario = do
     Mensagens.ehFuncionario
     cpf <- Util.lerEntradaString
      
@@ -16,11 +16,13 @@ verificaFuncioanrio = do
     if (Util.ehCadastrado cpf lista)
         then do {putStr("\nBem vindo de volta!\n"); loginFuncionario}
     else do
-        putStrLn ("Nao existe!")
+        {Mensagens.usuarioInvalido; verificaFuncionario}
 
 loginFuncionario :: IO()
 loginFuncionario = do
     Mensagens.menuFuncionario
+
+    putStr("Opção: ")
     op <- Util.lerEntradaString
     if op == "1"
         then do cadastrarCliente
@@ -31,22 +33,37 @@ loginFuncionario = do
     else if op == "5"
         then do calcularValorEstacionamento
     else if op == "6"
-        then do return()
+        then do {Mensagens.mensagemDeSaida; return()}
     else do
         {Mensagens.opcaoInvalida; loginFuncionario}
 
 calcularValorEstacionamento :: IO()
 calcularValorEstacionamento = do
-    Mensagens.cadastrarCpf
+    Mensagens.informeCpf
     cpf <- Util.lerEntradaString
 
     arq <- readFile "arquivos/horario-cpf.txt"
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
     if (Util.ehCadastrado cpf lista)
-        then do {putStr("\ncpf existe\n"); horaDeSaidaCalculo cpf}
+        then do {horaDeSaidaCalculo cpf; reescreverVaga cpf; loginFuncionario}
     else do
-        putStrLn("cpf nao existe")
+        {Mensagens.usuarioInvalido; loginFuncionario}
+
+reescreverVaga :: String -> IO()
+reescreverVaga cpf = do
+
+    arq <- readFile "arquivos/cpv.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+
+    let getVaga = Util.getIndiceCpv(Util.getVagaCpv cpf lista) ++ "," ++ "\n"
+    appendFile "arquivos/vagas.txt" (getVaga)
+
+    let excluirCpv = Util.opcaoVaga cpf lista
+    print(excluirCpv)
+    Util.escreverCpv (primeiraCpv (excluirCpv)) ----- TEM QUE EXCLUIR O HORARIO-CPF
+    putStr("")
+
 
 horaDeSaidaCalculo :: String -> IO()
 horaDeSaidaCalculo cpf = do
@@ -56,6 +73,10 @@ horaDeSaidaCalculo cpf = do
     arq <- readFile "arquivos/horario-cpf.txt"
     let lista = ((Data.List.map (wordsWhen(==',') ) (lines arq)))
 
+    arqClientes <- readFile "arquivos/clientes.txt"
+    let lista2 = ((Data.List.map (wordsWhen(==',') ) (lines arqClientes)))
+
+    Mensagens.valorPago cpf lista2
     print(valorFinalEst horaDeSaida (dizHoraInt (horaCpf cpf lista)))
 
 horaCpf :: String -> [[String]] -> [[String]]
@@ -80,18 +101,23 @@ cadastrarCliente :: IO()
 cadastrarCliente = do
     Mensagens.cadastrarNome
     nome <- Util.lerEntradaString
-    Mensagens.cadastrarCpf
+    Mensagens.informeCpf
     cpf <- Util.lerEntradaString
+
+    arq <- readFile "arquivos/clientes.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
     if not (Util.ehCpfValido cpf)
         then do {Mensagens.cpfInvalido; cadastrarCliente}
+    else if (Util.ehCadastrado cpf lista)
+        then do {Mensagens.usuarioCadastrado; cadastrarCliente}
     else do
         Mensagens.cadastrarPlaca
         placa <- Util.lerEntradaString
-        let clienteStr = cpf ++ "," ++ nome ++ "," ++ placa ++ "," ++ " " ++ "\n"
+        let clienteStr = cpf ++ "," ++ nome ++ "," ++ placa ++ "\n"
         appendFile "arquivos/clientes.txt" (clienteStr)
 
-        Mensagens.cadastraHorario
+        Mensagens.cadastraHorarioEntrada
         horario <- Util.lerEntradaString
         let horaCpf = cpf ++ "," ++ horario ++ "\n"
         appendFile "arquivos/horario-cpf.txt" (horaCpf)
