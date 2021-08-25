@@ -89,13 +89,63 @@ escreverCpv n = do
     hFlush arq
     hClose arq
 
+escreverHorarioCpf :: String -> IO()
+escreverHorarioCpf n = do
+
+    arq <- openFile "arquivos/horario-cpf.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+primeiraHorarioCpf :: [[String]] -> String
+primeiraHorarioCpf [] = ""
+primeiraHorarioCpf (x:xs) = head x ++ "," ++ (x !! 1) ++ "\n" ++ primeiraHorarioCpf xs
+
 primeiraCpv :: [[String]] -> String
 primeiraCpv [] = ""
-primeiraCpv (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++ "\n" ++ primeiraCpv xs
+primeiraCpv (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++ "," ++ (x !! 3) ++ "\n" ++ primeiraCpv xs
 
 
 primeira :: [[String]] -> String
 primeira [] = ""
 primeira (x:xs) = head x ++ "," ++ "\n" ++ primeira xs
 
+-------- ORDENAR VAGAS ---------
+getMenor :: [String] -> String
+getMenor [x] = x
+getMenor(x:xs) | ( parseToInt (x) < parseToInt (maxi)) = x
+               | otherwise = maxi
+             where maxi = getMenor xs
 
+removeMenor :: [String] -> [String]
+removeMenor [] = []
+removeMenor (x:xs) | (x == getMenor(x:xs)) = xs
+                   | otherwise = (x:removeMenor xs)
+
+parseToInt :: String -> Int
+parseToInt s = read (s) :: Int
+
+ordena :: [String] -> [String] -> [String]
+ordena lista_ordenada [] = lista_ordenada
+ordena lista_ordenada listaOriginal = ordena (lista_ordenada++[getMenor listaOriginal]) (removeMenor listaOriginal)
+
+
+ordenarLista :: [String] -> [String]
+ordenarLista listaOriginal = ordena [] listaOriginal
+
+parseDicToList :: [[String]] -> [String]
+parseDicToList [] = []
+parseDicToList lista = head (head lista):parseDicToList (tail lista)
+
+parseToTxt :: [String] -> String
+parseToTxt [] = ""
+parseToTxt lista = head lista ++ "," ++ "\n" ++ parseToTxt (tail lista)
+
+reescreveVagas :: IO()
+reescreveVagas = do
+
+    arq <- readFile "arquivos/vagas.txt"
+    ---hPutStr arq n
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+
+    print ((ordenarLista (parseDicToList (lista))))

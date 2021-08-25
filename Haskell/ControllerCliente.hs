@@ -5,20 +5,20 @@ import Estacionamento
 import Cliente
 import Data.List
 
-loginCliente :: IO()
-loginCliente = do
+loginCliente :: (IO()) -> IO()
+loginCliente menu = do
     Mensagens.menuDoCliente
 
     putStr("Opção: ")
     opcao <- Util.lerEntradaString
 
-    opcoesCliente opcao
+    opcoesCliente menu opcao
 
-opcoesCliente :: String -> IO()
-opcoesCliente opcao | opcao == "1" = do {Mensagens.exibirListaVagas; loginCliente}
-                    | opcao == "2" = do {vagaOcupadaCliente; loginCliente}
-                    | opcao == "6" = do {Mensagens.mensagemDeSaida; return()}
-                    | otherwise = do {Mensagens.opcaoInvalida; loginCliente}
+opcoesCliente :: (IO()) -> String -> IO()
+opcoesCliente menu opcao | opcao == "1" = do {Mensagens.exibirListaVagas; Util.reescreveVagas; loginCliente menu}
+                        | opcao == "2" = do {vagaOcupadaCliente; loginCliente menu}
+                        | opcao == "6" = menu
+                        | otherwise = do {Mensagens.opcaoInvalida; loginCliente menu}
 
 vagaOcupadaCliente :: IO()
 vagaOcupadaCliente = do

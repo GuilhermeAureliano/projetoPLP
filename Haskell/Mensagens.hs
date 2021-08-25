@@ -37,7 +37,7 @@ menuDoCliente = do
     putStrLn("[3] Recomendação de vaga do Estacionamento")
     putStrLn("[4] Assinar contrato de exclusividade")
     putStrLn("[5] Adicionar serviço extra de lava jato e cera")
-    putStrLn("[6] Sair do sistema\n")
+    putStrLn("[6] Voltar ao menu principal\n")
 
 usuarioInvalido :: IO()
 usuarioInvalido = do
@@ -65,7 +65,7 @@ menuFuncionario = do
     putStrLn("[3] Exibir clientes cadastrados")
     putStrLn("[4] Gerenciar clientes")
     putStrLn("[5] Calcular valor do estacionamento")
-    putStrLn("[6] Sair do sistema\n")
+    putStrLn("[6] Voltar ao menu principal\n")
 
 cadastrarNome :: IO()
 cadastrarNome = do
@@ -96,9 +96,9 @@ exibirListaVagas = do
     ---putStrLn conteudo
     ---hClose arq
 
-    arq <- readFile "arquivos/vagas.txt"
-    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-    print lista
+    --arq <- readFile "arquivos/vagas.txt"
+    --let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+    --print lista
 
 
 exibirListaClientesCadastrados :: IO()
@@ -124,7 +124,7 @@ menuDono = do
     putStrLn("[3] Gerenciar finanças")
     putStrLn("[4] Visualizar funcionários ativos")
     putStrLn("[5] Visualizar clientes ativos")
-    putStrLn("[6] Sair do sistema\n")
+    putStrLn("[6] Voltar ao menu principal\n")
 
 
 exibirListaFuncionariosCadastrados :: IO()

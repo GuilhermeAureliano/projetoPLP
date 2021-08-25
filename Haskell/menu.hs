@@ -15,8 +15,8 @@ main = do
 	escolheOpcao opcao
 
 escolheOpcao :: String -> IO()
-escolheOpcao opcao | opcao == "1" = ControllerCliente.loginCliente
-				   | opcao == "2" = ControllerFuncionario.verificaFuncionario
-				   | opcao == "3" = ControllerDono.verificaDono
+escolheOpcao opcao | opcao == "1" = ControllerCliente.loginCliente main
+				   | opcao == "2" = ControllerFuncionario.verificaFuncionario main
+				   | opcao == "3" = ControllerDono.verificaDono main
 				   | opcao == "4" = Mensagens.mensagemDeSaida
                    | otherwise = do {Mensagens.opcaoInvalida; main}
