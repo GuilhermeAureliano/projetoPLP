@@ -64,14 +64,20 @@ escolheVaga cpf placa = do
     print(lista)
     putStr("\nQual vaga você deseja? ")
 
-    input <- lerEntradaString
-    let lista2 = opcaoVaga (input) lista
+    vaga <- lerEntradaString
+    let lista2 = opcaoVaga (vaga) lista
 
     let n = primeira (lista2)
     escreverArq (primeira (lista2))
 
-    let cpvStr = cpf ++ "," ++ placa ++ "," ++ input ++ "\n"
+    let cpvStr = cpf ++ "," ++ placa ++ "," ++ vaga ++ "\n"
     appendFile "arquivos/cpv.txt" (cpvStr)
+
+    putStr("\nHora de entrada? ")
+    horario <- Util.lerEntradaString
+
+    let cpvh = cpf ++ "," ++ placa ++ "," ++ vaga ++ "," ++ horario ++ "\n"
+    appendFile "arquivos/horario-cpf.txt"  (cpvh)
 
 escreverArq :: String -> IO()
 escreverArq n = do

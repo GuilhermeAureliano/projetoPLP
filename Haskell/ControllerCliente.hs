@@ -25,6 +25,7 @@ vagaOcupadaCliente = do
     Mensagens.informeCpf
     cpf <- Util.lerEntradaString
 
+    --- fazer cadastro antes de escolher a vaga!
     arq <- readFile "arquivos/cpv.txt"
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 

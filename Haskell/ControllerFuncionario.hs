@@ -118,10 +118,5 @@ cadastrarCliente menu = do
         placa <- Util.lerEntradaString
         let clienteStr = cpf ++ "," ++ nome ++ "," ++ placa ++ "\n"
         appendFile "arquivos/clientes.txt" (clienteStr)
-
-        Mensagens.cadastraHorarioEntrada
-        horario <- Util.lerEntradaString
-        let horaCpf = cpf ++ "," ++ horario ++ "\n"
-        appendFile "arquivos/horario-cpf.txt" (horaCpf)
         
         loginFuncionario menu
