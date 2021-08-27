@@ -67,6 +67,10 @@ escolheVaga cpf placa = do
     vaga <- lerEntradaString
     let lista2 = opcaoVaga (vaga) lista
 
+    putStr("\nDeseja adicionar serviço extra de lava-jato e cera? [S/N] ")
+    servicoextra <- Util.lerEntradaString
+
+
     let n = primeira (lista2)
     escreverArq (primeira (lista2))
 
@@ -76,8 +80,12 @@ escolheVaga cpf placa = do
     putStr("\nHora de entrada? ")
     horario <- Util.lerEntradaString
 
-    let cpvh = cpf ++ "," ++ placa ++ "," ++ vaga ++ "," ++ horario ++ "\n"
+    let cpvh = cpf ++ "," ++ placa ++ "," ++ vaga ++ "," ++ horario ++ "," ++ servicoextra ++ "\n"
+
     appendFile "arquivos/horario-cpf.txt"  (cpvh)
+
+    let cpfUltimaVaga = cpf ++ "," ++ vaga ++ "\n"
+    appendFile "arquivos/recomendarVaga.txt" (cpfUltimaVaga)
 
 escreverArq :: String -> IO()
 escreverArq n = do
@@ -109,7 +117,7 @@ primeiraHorarioCpf (x:xs) = head x ++ "," ++ (x !! 1) ++ "\n" ++ primeiraHorario
 
 primeiraCpv :: [[String]] -> String
 primeiraCpv [] = ""
-primeiraCpv (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++ "," ++ (x !! 3) ++ "\n" ++ primeiraCpv xs
+primeiraCpv (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++ "," ++ (x !! 3) ++ "," ++ (x !! 4) ++ "\n" ++ primeiraCpv xs
 
 
 primeira :: [[String]] -> String
@@ -155,3 +163,11 @@ reescreveVagas = do
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
     print ((ordenarLista (parseDicToList (lista))))
+
+recomendacaoVaga :: [[String]] -> String
+recomendacaoVaga (x:xs) = (x !! 1) 
+
+auxRecomendar :: String -> [[String]] -> [[String]]
+auxRecomendar _ [] = []
+auxRecomendar v (x:xs) | (aux v x) == False = auxRecomendar v xs
+                   | otherwise = x:auxRecomendar v xs

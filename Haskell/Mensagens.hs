@@ -36,8 +36,7 @@ menuDoCliente = do
     putStrLn("[2] Escolher vaga")
     putStrLn("[3] Recomendação de vaga do Estacionamento")
     putStrLn("[4] Assinar contrato de exclusividade")
-    putStrLn("[5] Adicionar serviço extra de lava jato e cera")
-    putStrLn("[6] Voltar ao menu principal\n")
+    putStrLn("[5] Voltar ao menu principal\n")
 
 usuarioInvalido :: IO()
 usuarioInvalido = do

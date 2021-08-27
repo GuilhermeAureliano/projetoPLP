@@ -58,10 +58,15 @@ reescreverVaga cpf = do
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
     putStr("")
 
+extraInt :: [[String]] -> Int
+extraInt (x:xs) | (x !! 4) == "s" = 15
+                | otherwise = 0
+
 horaDeSaidaCalculo :: String -> IO()
 horaDeSaidaCalculo cpf = do
     arq <- readFile "arquivos/horario-cpf.txt"
     let lista = ((Data.List.map (wordsWhen(==',') ) (lines arq)))
+    let servicoFilt = Util.auxRecomendar cpf lista
 
     if (lista == [])
         then do Mensagens.usuarioInvalido
@@ -78,7 +83,7 @@ horaDeSaidaCalculo cpf = do
         let lista2 = ((Data.List.map (wordsWhen(==',') ) (lines arqClientes)))
 
         Mensagens.valorPago cpf lista2
-        print(valorFinalEst horaDeSaida (dizHoraInt (horaCpf cpf lista)))
+        print(valorFinalEst horaDeSaida (dizHoraInt (horaCpf cpf lista)) (extraInt (servicoFilt)))
         putStr("")
 
 horaCpf :: String -> [[String]] -> [[String]]
@@ -95,8 +100,8 @@ dizHoraInt lista = read (lista !! 0 !! 3) :: Int
 toInt :: String -> Int
 toInt s = read (s) :: Int
 
-valorFinalEst :: String -> Int -> Int
-valorFinalEst saida entrada =  ((toInt saida) - entrada) * 5
+valorFinalEst :: String -> Int -> Int -> Int
+valorFinalEst saida entrada extra =  (((toInt saida) - entrada) * 5) + extra
 
 
 cadastrarCliente :: (IO()) -> IO()
