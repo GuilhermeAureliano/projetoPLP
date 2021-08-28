@@ -38,6 +38,9 @@ opcaoVaga _ [] = []
 opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
                    | otherwise = x:opcaoVaga v xs
 
+aux :: String -> [String] -> Bool
+aux v (x:xs) = (v == x)
+
 getVagaCpv :: String -> [[String]] -> [[String]]
 getVagaCpv _ [] = []
 getVagaCpv v (x:xs) | (aux v x) == False = getVagaCpv v xs
@@ -47,8 +50,6 @@ getIndiceCpv :: [[String]] -> String
 getIndiceCpv l = l !! 0 !! 2
 
 
-aux :: String -> [String] -> Bool
-aux v (x:xs) = (v == x)
 
 escolheVaga :: String -> String -> IO()
 escolheVaga cpf placa = do
@@ -72,7 +73,7 @@ escolheVaga cpf placa = do
 
 
     let n = primeira (lista2)
-    escreverArq (primeira (lista2))
+    escreveVaga (primeira (lista2))
 
     let cpvStr = cpf ++ "," ++ placa ++ "," ++ vaga ++ "\n"
     appendFile "arquivos/cpv.txt" (cpvStr)
@@ -87,8 +88,8 @@ escolheVaga cpf placa = do
     let cpfUltimaVaga = cpf ++ "," ++ vaga ++ "\n"
     appendFile "arquivos/recomendarVaga.txt" (cpfUltimaVaga)
 
-escreverArq :: String -> IO()
-escreverArq n = do
+escreveVaga :: String -> IO()
+escreveVaga n = do
 
     arq <- openFile "arquivos/vagas.txt" WriteMode
     hPutStr arq n
@@ -171,3 +172,16 @@ auxRecomendar :: String -> [[String]] -> [[String]]
 auxRecomendar _ [] = []
 auxRecomendar v (x:xs) | (aux v x) == False = auxRecomendar v xs
                    | otherwise = x:auxRecomendar v xs
+
+toInt :: String -> Int
+toInt s = read (s) :: Int
+
+toString :: Int -> String
+toString n = show (n)
+
+contrato :: String -> [[String]] -> [[String]]
+contrato _ [] = []
+contrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt (x !! 1) + 1))):[]):contrato cpf xs
+                    | otherwise = ((x !! 0):(toString ((toInt (x !! 1)))):[]):contrato cpf xs
+
+---[["20","0"],["90","0"],["85","1"],["25","0"]]  
