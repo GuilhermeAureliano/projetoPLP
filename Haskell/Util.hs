@@ -88,6 +88,14 @@ escolheVaga cpf placa = do
     let cpfUltimaVaga = cpf ++ "," ++ vaga ++ "\n"
     appendFile "arquivos/recomendarVaga.txt" (cpfUltimaVaga)
 
+escreveCliente :: String -> IO()
+escreveCliente n = do
+
+    arq <- openFile "arquivos/clientes.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
 escreveVaga :: String -> IO()
 escreveVaga n = do
 
@@ -100,6 +108,14 @@ escreverCpv :: String -> IO()
 escreverCpv n = do
 
     arq <- openFile "arquivos/cpv.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+escreverUsoDoContrato :: String -> IO()
+escreverUsoDoContrato n = do
+
+    arq <- openFile "arquivos/usoDoContrato.txt" WriteMode
     hPutStr arq n
     hFlush arq
     hClose arq
@@ -121,6 +137,10 @@ primeiraCpv [] = ""
 primeiraCpv (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++ "," ++ (x !! 3) ++ "," ++ (x !! 4) ++ "\n" ++ primeiraCpv xs
 
 
+primeiraCliente :: [[String]] -> String
+primeiraCliente [] = ""
+primeiraCliente (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++ "\n" ++ primeiraCliente xs
+
 primeira :: [[String]] -> String
 primeira [] = ""
 primeira (x:xs) = head x ++ "," ++ "\n" ++ primeira xs
@@ -128,7 +148,7 @@ primeira (x:xs) = head x ++ "," ++ "\n" ++ primeira xs
 -------- ORDENAR VAGAS ---------
 getMenor :: [String] -> String
 getMenor [x] = x
-getMenor(x:xs) | ( parseToInt (x) < parseToInt (maxi)) = x
+getMenor(x:xs) | ( parseToInt2 (x) < parseToInt2 (maxi)) = x
                | otherwise = maxi
              where maxi = getMenor xs
 
@@ -137,8 +157,8 @@ removeMenor [] = []
 removeMenor (x:xs) | (x == getMenor(x:xs)) = xs
                    | otherwise = (x:removeMenor xs)
 
-parseToInt :: String -> Int
-parseToInt s = read (s) :: Int
+parseToInt2 :: String -> Int
+parseToInt2 s = read (s) :: Int
 
 ordena :: [String] -> [String] -> [String]
 ordena lista_ordenada [] = lista_ordenada
@@ -173,15 +193,33 @@ auxRecomendar _ [] = []
 auxRecomendar v (x:xs) | (aux v x) == False = auxRecomendar v xs
                    | otherwise = x:auxRecomendar v xs
 
-toInt :: String -> Int
-toInt s = read (s) :: Int
+toInt2 :: String -> Int
+toInt2 s = read (s) :: Int
 
 toString :: Int -> String
 toString n = show (n)
 
+
+primeiraContrato :: [[String]] -> String
+primeiraContrato [] = ""
+primeiraContrato (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++  "\n" ++ primeiraContrato xs
+
 contrato :: String -> [[String]] -> [[String]]
 contrato _ [] = []
-contrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt (x !! 1) + 1))):[]):contrato cpf xs
-                    | otherwise = ((x !! 0):(toString ((toInt (x !! 1)))):[]):contrato cpf xs
+contrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) + 1))):(x !! 2):[]):contrato cpf xs
+                    | otherwise = ((x !! 0):(toString ((toInt2 (x !! 1)))):(x !! 2):[]):contrato cpf xs
+
+renovarContrato :: String -> [[String]] -> [[String]]
+renovarContrato _ [] = []
+renovarContrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) * 0))):(x !! 2):[]):renovarContrato cpf xs
+                    | otherwise = ((x !! 0):(toString ((toInt2 (x !! 1)))):(x !! 2):[]):renovarContrato cpf xs
 
 ---[["20","0"],["90","0"],["85","1"],["25","0"]]  
+
+escreverUsoDoContratoRenovado :: String -> IO()
+escreverUsoDoContratoRenovado n = do
+
+    arq <- openFile "arquivos/usoDoContrato.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq

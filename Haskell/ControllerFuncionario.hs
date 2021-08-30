@@ -31,12 +31,41 @@ loginFuncionario menu = do
         then do {Mensagens.exibirListaVagas; Util.reescreveVagas; loginFuncionario menu}
     else if op == "3"
         then do {Mensagens.exibirListaClientesCadastrados; loginFuncionario menu}
+    else if op == "4"
+        then do {excluirCliente menu; loginFuncionario menu}
     else if op == "5"
         then do calcularValorEstacionamento menu
     else if op == "6"
         then do menu
     else do
         {Mensagens.opcaoInvalida; loginFuncionario menu}
+getlines :: Handle -> IO [String]
+getlines h = hGetContents h >>= return . lines
+
+excluirCliente :: (IO()) -> IO()
+excluirCliente menu = do
+    putStr("Informe o CPF do cliente que deseja excluir: ")
+    cpf <- Util.lerEntradaString
+
+    arq <- openFile "arquivos/clientes.txt" ReadMode
+    xs <- getlines arq
+    let lista = ((Data.List.map (wordsWhen(==',') ) (xs)))
+    putStr("\nAtualmente temos os seguintes clientes no sistema: ")
+    print (lista)
+
+    if not (Util.ehCadastrado cpf lista)
+        then do {Mensagens.usuarioInvalido; loginFuncionario menu}
+    else do
+        putStr("")
+        let clientesExc = Util.primeiraCliente (Util.opcaoVaga cpf lista)
+        Util.escreveCliente ""
+
+        appendFile "arquivos/clientes.txt" (clientesExc)
+
+        putStr("\nCliente excluído com sucesso!\n")
+        loginFuncionario menu
+
+
 
 calcularValorEstacionamento :: (IO()) -> IO()
 calcularValorEstacionamento menu = do

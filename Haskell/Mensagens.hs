@@ -36,7 +36,8 @@ menuDoCliente = do
     putStrLn("[2] Escolher vaga")
     putStrLn("[3] Recomendação de vaga do Estacionamento")
     putStrLn("[4] Assinar contrato de exclusividade")
-    putStrLn("[5] Voltar ao menu principal\n")
+    putStrLn("[5] Ocupar vaga para clientes com contrato")
+    putStrLn("[6] Voltar ao menu principal\n")
 
 usuarioInvalido :: IO()
 usuarioInvalido = do
@@ -62,7 +63,7 @@ menuFuncionario = do
     putStrLn("[1] Cadastrar cliente")
     putStrLn("[2] Exibir lista das vagas disponíveis")
     putStrLn("[3] Exibir clientes cadastrados")
-    putStrLn("[4] Gerenciar clientes")
+    putStrLn("[4] Excluir cliente do sistema")
     putStrLn("[5] Calcular valor do estacionamento")
     putStrLn("[6] Voltar ao menu principal\n")
 
@@ -119,7 +120,7 @@ menuDono = do
 
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Cadastrar funcionário")
-    putStrLn("[2] Gerenciar funcionários")
+    putStrLn("[2] Excluir funcionários")
     putStrLn("[3] Gerenciar finanças")
     putStrLn("[4] Visualizar funcionários ativos")
     putStrLn("[5] Visualizar clientes ativos")
