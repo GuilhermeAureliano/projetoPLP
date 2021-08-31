@@ -3,8 +3,6 @@ import ControllerFuncionario
 import ControllerDono
 import Util
 import Mensagens
-import Estacionamento
-import Cliente
 
 main :: IO ()
 main = do

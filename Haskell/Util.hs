@@ -49,6 +49,8 @@ getVagaCpv v (x:xs) | (aux v x) == False = getVagaCpv v xs
 getIndiceCpv :: [[String]] -> String
 getIndiceCpv l = l !! 0 !! 2
 
+getIndiceContratos :: [[String]] -> String
+getIndiceContratos l = l !! 0 !! 3
 
 
 escolheVaga :: String -> String -> IO()
@@ -96,6 +98,14 @@ escreveCliente n = do
     hFlush arq
     hClose arq
 
+escreveFuncionario :: String -> IO()
+escreveFuncionario n = do
+
+    arq <- openFile "arquivos/funcionarios.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
 escreveVaga :: String -> IO()
 escreveVaga n = do
 
@@ -116,6 +126,14 @@ escreverUsoDoContrato :: String -> IO()
 escreverUsoDoContrato n = do
 
     arq <- openFile "arquivos/usoDoContrato.txt" WriteMode
+    hPutStr arq n
+    hFlush arq
+    hClose arq
+
+escreverContratos :: String -> IO()
+escreverContratos n = do
+
+    arq <- openFile "arquivos/contratos.txt" WriteMode
     hPutStr arq n
     hFlush arq
     hClose arq
@@ -179,6 +197,7 @@ parseToTxt lista = head lista ++ "," ++ "\n" ++ parseToTxt (tail lista)
 reescreveVagas :: IO()
 reescreveVagas = do
 
+    putStrLn("       -----VAGAS DISPONÍVEIS-----\n")
     arq <- readFile "arquivos/vagas.txt"
     ---hPutStr arq n
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
@@ -214,12 +233,9 @@ renovarContrato _ [] = []
 renovarContrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) * 0))):(x !! 2):[]):renovarContrato cpf xs
                     | otherwise = ((x !! 0):(toString ((toInt2 (x !! 1)))):(x !! 2):[]):renovarContrato cpf xs
 
----[["20","0"],["90","0"],["85","1"],["25","0"]]  
+devolverVaga2 :: String -> IO()
+devolverVaga2 cpf = do
 
-escreverUsoDoContratoRenovado :: String -> IO()
-escreverUsoDoContratoRenovado n = do
-
-    arq <- openFile "arquivos/usoDoContrato.txt" WriteMode
-    hPutStr arq n
-    hFlush arq
-    hClose arq
+    arq <- readFile "arquivos/contratos.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+    putStr("")

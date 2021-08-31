@@ -1,8 +1,6 @@
 module ControllerCliente where
 import Util
 import Mensagens
-import Estacionamento
-import Cliente
 import Data.List
 import System.IO
 
@@ -16,7 +14,7 @@ loginCliente menu = do
     opcoesCliente menu opcao
 
 opcoesCliente :: (IO()) -> String -> IO()
-opcoesCliente menu opcao | opcao == "1" = do {Mensagens.exibirListaVagas; Util.reescreveVagas; loginCliente menu}
+opcoesCliente menu opcao | opcao == "1" = do {Util.reescreveVagas; loginCliente menu}
                         | opcao == "2" = do {vagaOcupadaCliente; loginCliente menu}
                         | opcao == "3" = do {recomendarVaga; loginCliente menu}
                         | opcao == "4" = do {assinarContrato; loginCliente menu}
@@ -36,53 +34,20 @@ clienteComContrato menu = do
     arq <- openFile "arquivos/usoDoContrato.txt" ReadMode
     xs <- getlines arq
     let lista = ((Data.List.map (wordsWhen(==',') ) (xs)))
-
     putStr("\nAtualmente temos os seguintes clientes ativos e suas respectivas vagas: ")
-    print (lista)
-
+    print lista
 
     let cvc = Util.getVagaCpv cpf lista
 
     if not (Util.ehCadastrado cpf lista)
         then do 
-            putStr("O senhor não tem contrato ativo!\n")
-            loginCliente menu
+            putStr("\nO senhor não tem contrato ativo!\n")
     else do
         if ((cvc !! 0 !! 2) == "s" && (cvc !! 0 !! 1) == "7") 
-            then do
-                putStr("\nContrato semanal acabou!\n")
-                putStr("\nO senhor deseja renovar o contrato semanal? [S/N] ")
-                renova <- Util.lerEntradaString
-
-                if (renova == "s")
-                    then do
-                        let var2 = (Util.primeiraContrato (Util.renovarContrato cpf lista))
-                        Util.escreverUsoDoContrato ""
-                        appendFile "arquivos/usoDoContrato.txt" (var2)
-                        putStr("\nContrato renovado com sucesso!\n")
-                else do
-                    let var2 = (Util.primeiraContrato (Util.opcaoVaga cpf lista))
-                    Util.escreverUsoDoContrato ""
-                    appendFile "arquivos/usoDoContrato.txt" (var2)
-                    putStr("\nContrato não renovado! :( \n")
+            then do renovacaoDeContrato cpf lista
 
         else if ((cvc !! 0 !! 2) == "m" && (cvc !! 0 !! 1) == "30")
-            then do
-                putStr("\nContrato mensal acabou!\n")
-                putStr("\nO senhor deseja renovar o contrato? [S/N] ")
-                renova <- Util.lerEntradaString
-
-                if (renova == "s")
-                    then do
-                        let var2 = (Util.primeiraContrato (Util.renovarContrato cpf lista))
-                        Util.escreverUsoDoContrato ""
-                        appendFile "arquivos/usoDoContrato.txt" (var2)
-                        putStr("\nContrato renovado com sucesso!\n")
-                else do
-                    let var2 = (Util.primeiraContrato (Util.opcaoVaga cpf lista))
-                    Util.escreverUsoDoContrato ""
-                    appendFile "arquivos/usoDoContrato.txt" (var2)
-                    putStr("\nContrato não renovado! :( \n")
+            then do renovacaoDeContrato cpf lista
 
         else do
             putStr("\nBem-vindo de volta! O senhor estará usando seu contrato!\n")
@@ -94,7 +59,35 @@ clienteComContrato menu = do
             appendFile "arquivos/usoDoContrato.txt" (var)
             putStr("")
 
+renovacaoDeContrato :: String -> [[String]] -> IO()
+renovacaoDeContrato cpf lista = do
+    putStr("\nContrato do senhor acabou!")
+    putStr("\nO senhor deseja renovar o contrato? [S/N] ")
+    renova <- Util.lerEntradaString
 
+    if (renova == "s")
+        then do
+            let var2 = (Util.primeiraContrato (Util.renovarContrato cpf lista))
+            Util.escreverUsoDoContrato ""
+            appendFile "arquivos/usoDoContrato.txt" (var2)
+            putStr("\nContrato renovado com sucesso!\n")
+    else do
+
+        let var2 = (Util.primeiraContrato (Util.opcaoVaga cpf lista))
+        Util.escreverUsoDoContrato ""
+        appendFile "arquivos/usoDoContrato.txt" (var2)
+
+        arqCont <- readFile "arquivos/contratos.txt"
+        let lista2 = ((Data.List.map (wordsWhen(==',') ) (lines arqCont)))
+        putStr("\nExcluindo cliente que tem o CPF " ++ cpf ++ " do sistema...")
+        print (lista2)
+        let var3 = (Util.primeiraCpv (Util.opcaoVaga cpf lista2))
+        Util.escreverContratos ""
+        appendFile "arquivos/contratos.txt" (var3)
+        putStr("\nContrato não renovado! :( \n")
+
+        let getVaga = Util.getIndiceContratos (Util.getVagaCpv cpf lista2) ++ "," ++ "\n"
+        appendFile "arquivos/vagas.txt" (getVaga)
 
 assinarContrato :: IO()
 assinarContrato = do
@@ -106,8 +99,9 @@ assinarContrato = do
     arq <- readFile "arquivos/usoDoContrato.txt"
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
+
     if (Util.ehCadastrado cpf lista)
-        then do putStr("\nVocê contrato! Pode entrar no estacionamento.")
+        then do putStr("\nVocê já tem contrato ativo! Tecle 5 na área do cliente para usar seu contrato!\n")
     else do
 
         putStr("Informe o nome: ")
@@ -116,7 +110,7 @@ assinarContrato = do
         Mensagens.cadastrarPlaca
         placa <- Util.lerEntradaString
 
-        Mensagens.exibirListaVagas
+        putStrLn("       -----VAGAS DISPONÍVEIS-----\n")
 
         print lista2
         putStr("Qual vaga você deseja? ")
@@ -149,7 +143,6 @@ vagaOcupadaCliente = do
     Mensagens.informeCpf
     cpf <- Util.lerEntradaString
 
-    --- fazer cadastro antes de escolher a vaga!
     arq <- readFile "arquivos/cpv.txt"
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
@@ -179,7 +172,7 @@ recomendarVaga = do
     if (Util.ehCadastrado cpf lista)
         then do
             putStr("Nós recomendamos a você a vaga: ") 
-            print ( read (Util.recomendacaoVaga (Util.auxRecomendar cpf lista)) :: Int )
+            print ( read (Util.recomendacaoVaga (Util.auxRecomendar cpf (reverse (lista)))) :: Int )
 
     else do
-        putStr("\nO senhor nunca usou esse estacionamento!")
+        putStr("\nO senhor nunca usou esse estacionamento!\n")

@@ -5,14 +5,11 @@ import System.IO
 
 mensagemInicial :: IO ()
 mensagemInicial = do
-    arq <- openFile "arquivos/mensagem.txt" ReadMode
-    conteudo <- hGetContents arq
-    putStrLn conteudo
-    hClose arq
+    putStr("      === Bem-vindo ao ESTACIONAMENTO ===\n")
 
 menuPrincipal :: IO ()
 menuPrincipal = do
-    putStrLn("       -----MENU PRINCIPAL-----")
+    putStrLn("\n       -----MENU PRINCIPAL-----")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Área do Cliente")
     putStrLn("[2] Login como funcionário")
@@ -67,6 +64,14 @@ menuFuncionario = do
     putStrLn("[5] Calcular valor do estacionamento")
     putStrLn("[6] Voltar ao menu principal\n")
 
+menuFinancas :: IO()
+menuFinancas = do
+    putStrLn("\n       -----ÁREA DE FINANÇAS-----")
+    putStrLn("\nComo deseja prosseguir?")
+    putStrLn("[1] Visualizar contratos ativos")
+    putStrLn("[2] Alterar valor da hora do estacionamento")
+    putStrLn("[3] Voltar ao login do dono\n")
+
 cadastrarNome :: IO()
 cadastrarNome = do
     putStrLn("\n       -----CADASTRO DE USUÁRIO-----")
@@ -88,25 +93,18 @@ horaDeSaida :: IO()
 horaDeSaida = do
     putStr("Hora de saída: ")
 
-exibirListaVagas :: IO()
-exibirListaVagas = do
-    putStrLn("       -----VAGAS DISPONÍVEIS-----\n")
-    ---arq <- openFile "arquivos/vagas.txt" ReadMode
-    ---conteudo <- hGetContents arq
-    ---putStrLn conteudo
-    ---hClose arq
+exibirContratosAtivos :: IO()
+exibirContratosAtivos = do
+    putStrLn("       -----CLIENTES COM CONTRATOS-----\n")
 
-    --arq <- readFile "arquivos/vagas.txt"
-    --let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-    --print lista
-
+    arq <- openFile "arquivos/contratos.txt" ReadMode
+    conteudo <- hGetContents arq
+    putStrLn conteudo
+    hClose arq
 
 exibirListaClientesCadastrados :: IO()
 exibirListaClientesCadastrados = do
     putStrLn("       -----CLIENTES CADASTRADOS-----\n")
-    ---arq <- readFile "arquivos/clientes.txt"
-    ---let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-    ---print lista
 
     arq <- openFile "arquivos/clientes.txt" ReadMode
     conteudo <- hGetContents arq

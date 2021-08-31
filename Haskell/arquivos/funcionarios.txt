@@ -1,7 +1,1 @@
-12,Jose
-13,Armando
-10,Neymar
-7,Mbappe
-11,Di Maria
-8585,Manu
-P,SLASLA
+1515,Armando

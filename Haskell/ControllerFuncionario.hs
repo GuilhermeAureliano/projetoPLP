@@ -1,8 +1,6 @@
 module ControllerFuncionario where
 import Util
 import Mensagens
-import Estacionamento
-import Cliente
 import Data.List
 import System.IO
 
@@ -17,7 +15,7 @@ verificaFuncionario menu = do
     if (Util.ehCadastrado cpf lista)
         then do {putStr("\nBem vindo de volta!\n"); loginFuncionario menu}
     else do
-        {Mensagens.usuarioInvalido; verificaFuncionario menu}
+        {Mensagens.usuarioInvalido; menu}
 
 loginFuncionario :: (IO()) -> IO()
 loginFuncionario menu = do
@@ -28,7 +26,7 @@ loginFuncionario menu = do
     if op == "1"
         then do cadastrarCliente menu
     else if op == "2"
-        then do {Mensagens.exibirListaVagas; Util.reescreveVagas; loginFuncionario menu}
+        then do {Util.reescreveVagas; loginFuncionario menu}
     else if op == "3"
         then do {Mensagens.exibirListaClientesCadastrados; loginFuncionario menu}
     else if op == "4"
@@ -39,6 +37,7 @@ loginFuncionario menu = do
         then do menu
     else do
         {Mensagens.opcaoInvalida; loginFuncionario menu}
+        
 getlines :: Handle -> IO [String]
 getlines h = hGetContents h >>= return . lines
 
@@ -63,7 +62,7 @@ excluirCliente menu = do
         appendFile "arquivos/clientes.txt" (clientesExc)
 
         putStr("\nCliente excluído com sucesso!\n")
-        loginFuncionario menu
+
 
 
 
@@ -76,16 +75,9 @@ calcularValorEstacionamento menu = do
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
     if (Util.ehCadastrado cpf lista)
-        then do {horaDeSaidaCalculo cpf; reescreverVaga cpf; loginFuncionario menu}
+        then do {horaDeSaidaCalculo cpf; loginFuncionario menu}
     else do
         {Mensagens.usuarioInvalido; loginFuncionario menu}
-
-reescreverVaga :: String -> IO()
-reescreverVaga cpf = do
-
-    arq <- readFile "arquivos/cpv.txt"
-    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-    putStr("")
 
 extraInt :: [[String]] -> Int
 extraInt (x:xs) | (x !! 4) == "s" = 15
@@ -102,8 +94,10 @@ horaDeSaidaCalculo cpf = do
     else do
         Mensagens.horaDeSaida
         horaDeSaida <- Util.lerEntradaString
+
         let getVaga = Util.getIndiceCpv(Util.getVagaCpv cpf lista) ++ "," ++ "\n"
         appendFile "arquivos/vagas.txt" (getVaga)
+        
         Util.escreverCpv (primeiraCpv (Util.opcaoVaga cpf lista))
 
         Util.escreverHorarioCpf (primeiraCpv (Util.opcaoVaga cpf lista))
@@ -111,8 +105,12 @@ horaDeSaidaCalculo cpf = do
         arqClientes <- readFile "arquivos/clientes.txt"
         let lista2 = ((Data.List.map (wordsWhen(==',') ) (lines arqClientes)))
 
+        valor <- readFile "arquivos/valorEstacionamento.txt"
+        let lista3 = lines valor
+
         Mensagens.valorPago cpf lista2
-        print(valorFinalEst horaDeSaida (dizHoraInt (horaCpf cpf lista)) (extraInt (servicoFilt)))
+        print(valorFinalEst horaDeSaida (dizHoraInt (horaCpf cpf lista)) (extraInt (servicoFilt)) (toInt(lista3 !! 0)))
+
         putStr("")
 
 horaCpf :: String -> [[String]] -> [[String]]
@@ -129,8 +127,8 @@ dizHoraInt lista = read (lista !! 0 !! 3) :: Int
 toInt :: String -> Int
 toInt s = read (s) :: Int
 
-valorFinalEst :: String -> Int -> Int -> Int
-valorFinalEst saida entrada extra =  (((toInt saida) - entrada) * 5) + extra
+valorFinalEst :: String -> Int -> Int -> Int -> Int
+valorFinalEst saida entrada extra getValor =  (((toInt saida) - entrada) * getValor) + extra
 
 
 cadastrarCliente :: (IO()) -> IO()
