@@ -4,9 +4,10 @@ import Mensagens
 import Data.List
 import System.IO
 
+--- Verifica se o CPF passado é um funcionário cadastrado ---
 verificaFuncionario :: (IO()) -> IO()
 verificaFuncionario menu = do
-    Mensagens.ehFuncionario
+    Mensagens.cpfParaLogin
     cpf <- Util.lerEntradaString
      
     arq <- readFile "arquivos/funcionarios.txt"
@@ -17,6 +18,7 @@ verificaFuncionario menu = do
     else do
         {Mensagens.usuarioInvalido; menu}
 
+--- Chama alguma função de funcionário após o login ---
 loginFuncionario :: (IO()) -> IO()
 loginFuncionario menu = do
     Mensagens.menuFuncionario
@@ -24,16 +26,14 @@ loginFuncionario menu = do
     putStr("Opção: ")
     op <- Util.lerEntradaString
     if op == "1"
-        then do cadastrarCliente menu
-    else if op == "2"
         then do {Util.reescreveVagas; loginFuncionario menu}
-    else if op == "3"
+    else if op == "2"
         then do {Mensagens.exibirListaClientesCadastrados; loginFuncionario menu}
-    else if op == "4"
+    else if op == "3"
         then do {excluirCliente menu; loginFuncionario menu}
-    else if op == "5"
+    else if op == "4"
         then do calcularValorEstacionamento menu
-    else if op == "6"
+    else if op == "5"
         then do menu
     else do
         {Mensagens.opcaoInvalida; loginFuncionario menu}
@@ -41,6 +41,8 @@ loginFuncionario menu = do
 getlines :: Handle -> IO [String]
 getlines h = hGetContents h >>= return . lines
 
+
+--- Exclusão de cliente do sistema ---
 excluirCliente :: (IO()) -> IO()
 excluirCliente menu = do
     putStr("Informe o CPF do cliente que deseja excluir: ")
@@ -63,9 +65,7 @@ excluirCliente menu = do
 
         putStr("\nCliente excluído com sucesso!\n")
 
-
-
-
+--- Calcula valor do estacionamento ---
 calcularValorEstacionamento :: (IO()) -> IO()
 calcularValorEstacionamento menu = do
     Mensagens.informeCpf
@@ -130,25 +130,3 @@ toInt s = read (s) :: Int
 valorFinalEst :: String -> Int -> Int -> Int -> Int
 valorFinalEst saida entrada extra getValor =  (((toInt saida) - entrada) * getValor) + extra
 
-
-cadastrarCliente :: (IO()) -> IO()
-cadastrarCliente menu = do
-    Mensagens.cadastrarNome
-    nome <- Util.lerEntradaString
-    Mensagens.informeCpf
-    cpf <- Util.lerEntradaString
-
-    arq <- readFile "arquivos/clientes.txt"
-    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-
-    if not (Util.ehCpfValido cpf)
-        then do {Mensagens.cpfInvalido; cadastrarCliente menu}
-    else if (Util.ehCadastrado cpf lista)
-        then do {Mensagens.usuarioCadastrado; cadastrarCliente menu}
-    else do
-        Mensagens.cadastrarPlaca
-        placa <- Util.lerEntradaString
-        let clienteStr = cpf ++ "," ++ nome ++ "," ++ placa ++ "\n"
-        appendFile "arquivos/clientes.txt" (clienteStr)
-        
-        loginFuncionario menu

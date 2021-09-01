@@ -13,6 +13,8 @@ loginCliente menu = do
 
     opcoesCliente menu opcao
 
+
+--- Chama alguma função de acordo com o que foi digitado ---
 opcoesCliente :: (IO()) -> String -> IO()
 opcoesCliente menu opcao | opcao == "1" = do {Util.reescreveVagas; loginCliente menu}
                         | opcao == "2" = do {vagaOcupadaCliente; loginCliente menu}
@@ -26,6 +28,7 @@ opcoesCliente menu opcao | opcao == "1" = do {Util.reescreveVagas; loginCliente 
 getlines :: Handle -> IO [String]
 getlines h = hGetContents h >>= return . lines
 
+--- Escreve no arquivo "usoDoContrato" que o cliente utilizou do seu contrato ---
 clienteComContrato :: (IO()) -> IO()
 clienteComContrato menu = do
     Mensagens.informeCpf
@@ -52,13 +55,14 @@ clienteComContrato menu = do
         else do
             putStr("\nBem-vindo de volta! O senhor estará usando seu contrato!\n")
 
-            let var = (Util.primeiraContrato (Util.contrato cpf lista))
+            let var = (Util.primeiraCliente (Util.contrato cpf lista))
             Util.escreverUsoDoContrato ""
             putStr("")
 
             appendFile "arquivos/usoDoContrato.txt" (var)
             putStr("")
 
+--- Zera a quantidade de vezes que o cliente usou o estacionamento, serve como uma renovação de contrato ----
 renovacaoDeContrato :: String -> [[String]] -> IO()
 renovacaoDeContrato cpf lista = do
     putStr("\nContrato do senhor acabou!")
@@ -67,13 +71,13 @@ renovacaoDeContrato cpf lista = do
 
     if (renova == "s")
         then do
-            let var2 = (Util.primeiraContrato (Util.renovarContrato cpf lista))
+            let var2 = (Util.primeiraCliente (Util.renovarContrato cpf lista))
             Util.escreverUsoDoContrato ""
             appendFile "arquivos/usoDoContrato.txt" (var2)
             putStr("\nContrato renovado com sucesso!\n")
     else do
 
-        let var2 = (Util.primeiraContrato (Util.opcaoVaga cpf lista))
+        let var2 = (Util.primeiraCliente (Util.opcaoVaga cpf lista))
         Util.escreverUsoDoContrato ""
         appendFile "arquivos/usoDoContrato.txt" (var2)
 
@@ -89,6 +93,7 @@ renovacaoDeContrato cpf lista = do
         let getVaga = Util.getIndiceContratos (Util.getVagaCpv cpf lista2) ++ "," ++ "\n"
         appendFile "arquivos/vagas.txt" (getVaga)
 
+--- Assina contrato de exclusividade no estacionamento ---
 assinarContrato :: IO()
 assinarContrato = do
     Mensagens.informeCpf
@@ -138,16 +143,30 @@ assinarContrato = do
         escreveVaga (primeira (opcaoVaga (vaga) lista2))
         putStr("")
 
+--- Escolhe uma vaga das disponíveis ---
 vagaOcupadaCliente :: IO()
 vagaOcupadaCliente = do
+    putStr("\nPara continuar vai ser preciso efetuar um cadastro no sistema!\n")
     Mensagens.informeCpf
     cpf <- Util.lerEntradaString
 
     arq <- readFile "arquivos/cpv.txt"
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
+    arq2 <- readFile "arquivos/clientes.txt"
+    let lista2 = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq2)))
+
     if (Util.ehCadastrado cpf lista)
         then do Mensagens.usuarioVagaOcupada
+    else if (Util.ehCadastrado cpf lista2)
+        then do
+            putStr("\nVimos que o senhor já é cadastrado! Pode continuar!\n")
+
+            Mensagens.cadastrarPlaca
+            putStr("\n")
+            placa <- Util.lerEntradaString
+            Util.escolheVaga cpf placa
+            putStr("")
     else do
         putStr("Informe o nome: ")
         nome <- Util.lerEntradaString
@@ -161,6 +180,8 @@ vagaOcupadaCliente = do
         Util.escolheVaga cpf placa
     putStr("")
 
+
+--- Recomenda uma vaga para o cliente a partir do seu histórico prévio ---
 recomendarVaga :: IO()
 recomendarVaga = do
     Mensagens.informeCpf

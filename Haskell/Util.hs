@@ -7,13 +7,8 @@ lerEntradaString = do
     x <- getLine
     return x
 
-ehCpfValido :: String -> Bool
-ehCpfValido cpf = True
----- Comentado para aceitar qualquer número por enquanto
----ehCpfValido cpf | length cpf /= 11 = False
- ---               | otherwise = all (`elem` ['0'..'9']) cpf
 
-
+--- FUNÇÃO SPLIT QUE GERA UMA LISTA DE STRING ---
 wordsWhen     :: (Char -> Bool) -> String -> [String]
 wordsWhen p s =  case dropWhile p s of
                       "" -> []
@@ -33,6 +28,7 @@ ehCadastrado c (x:xs) | ((headCadastrado c x) == False) = ehCadastrado c xs
 headCadastrado :: String -> [String] -> Bool
 headCadastrado c (x:xs) = (c == x)
 
+--- GERA UMA LISTA DE LISTA SEM A LISTA QUE CONTEM O STRING PASSADO COMO PARÂMETRO ---
 opcaoVaga :: String -> [[String]] -> [[String]]
 opcaoVaga _ [] = []
 opcaoVaga v (x:xs) | (aux v x) == True = opcaoVaga v xs
@@ -52,7 +48,6 @@ getIndiceCpv l = l !! 0 !! 2
 getIndiceContratos :: [[String]] -> String
 getIndiceContratos l = l !! 0 !! 3
 
-
 escolheVaga :: String -> String -> IO()
 escolheVaga cpf placa = do
 
@@ -63,8 +58,8 @@ escolheVaga cpf placa = do
         then do print ("Não há vagas!!!!")
     else
         do
-
-    print(lista)
+    
+    print ((ordenarLista (parseDicToList (lista))))
     putStr("\nQual vaga você deseja? ")
 
     vaga <- lerEntradaString
@@ -90,6 +85,8 @@ escolheVaga cpf placa = do
     let cpfUltimaVaga = cpf ++ "," ++ vaga ++ "\n"
     appendFile "arquivos/recomendarVaga.txt" (cpfUltimaVaga)
 
+
+--- FUNÇÕES QUE ESCREVEM NO ARQUIVO ---
 escreveCliente :: String -> IO()
 escreveCliente n = do
 
@@ -146,6 +143,7 @@ escreverHorarioCpf n = do
     hFlush arq
     hClose arq
 
+--- FUNÇÕES QUE GERAM STRING NO FORMATO DE ESCRITA DE UM ARQUIVO ---
 primeiraHorarioCpf :: [[String]] -> String
 primeiraHorarioCpf [] = ""
 primeiraHorarioCpf (x:xs) = head x ++ "," ++ (x !! 1) ++ "\n" ++ primeiraHorarioCpf xs
@@ -194,12 +192,12 @@ parseToTxt :: [String] -> String
 parseToTxt [] = ""
 parseToTxt lista = head lista ++ "," ++ "\n" ++ parseToTxt (tail lista)
 
+
 reescreveVagas :: IO()
 reescreveVagas = do
 
     putStrLn("       -----VAGAS DISPONÍVEIS-----\n")
     arq <- readFile "arquivos/vagas.txt"
-    ---hPutStr arq n
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
     print ((ordenarLista (parseDicToList (lista))))
@@ -218,11 +216,6 @@ toInt2 s = read (s) :: Int
 toString :: Int -> String
 toString n = show (n)
 
-
-primeiraContrato :: [[String]] -> String
-primeiraContrato [] = ""
-primeiraContrato (x:xs) = head x ++ "," ++ (x !! 1) ++ "," ++ (x !! 2) ++  "\n" ++ primeiraContrato xs
-
 contrato :: String -> [[String]] -> [[String]]
 contrato _ [] = []
 contrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) + 1))):(x !! 2):[]):contrato cpf xs
@@ -232,10 +225,3 @@ renovarContrato :: String -> [[String]] -> [[String]]
 renovarContrato _ [] = []
 renovarContrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) * 0))):(x !! 2):[]):renovarContrato cpf xs
                     | otherwise = ((x !! 0):(toString ((toInt2 (x !! 1)))):(x !! 2):[]):renovarContrato cpf xs
-
-devolverVaga2 :: String -> IO()
-devolverVaga2 cpf = do
-
-    arq <- readFile "arquivos/contratos.txt"
-    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-    putStr("")

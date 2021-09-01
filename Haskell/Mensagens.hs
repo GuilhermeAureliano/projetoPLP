@@ -3,13 +3,9 @@ import Util
 import Data.List
 import System.IO
 
-mensagemInicial :: IO ()
-mensagemInicial = do
-    putStr("      === Bem-vindo ao ESTACIONAMENTO ===\n")
-
 menuPrincipal :: IO ()
 menuPrincipal = do
-    putStrLn("\n       -----MENU PRINCIPAL-----")
+    putStrLn("\n           -----MENU PRINCIPAL-----")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Área do Cliente")
     putStrLn("[2] Login como funcionário")
@@ -38,7 +34,7 @@ menuDoCliente = do
 
 usuarioInvalido :: IO()
 usuarioInvalido = do
-    putStrLn("\nErro: usuário não cadastrado!")
+    putStrLn("\nErro: usuário não cadastrado!\n")
 
 usuarioCadastrado :: IO()
 usuarioCadastrado = do
@@ -57,12 +53,11 @@ menuFuncionario = do
     putStrLn("\n       -----FUNCIONÁRIO-----")
     putStrLn("\nOlá, funcionário!")
     putStrLn("\nComo deseja prosseguir?")
-    putStrLn("[1] Cadastrar cliente")
-    putStrLn("[2] Exibir lista das vagas disponíveis")
-    putStrLn("[3] Exibir clientes cadastrados")
-    putStrLn("[4] Excluir cliente do sistema")
-    putStrLn("[5] Calcular valor do estacionamento")
-    putStrLn("[6] Voltar ao menu principal\n")
+    putStrLn("[1] Exibir lista das vagas disponíveis")
+    putStrLn("[2] Exibir clientes cadastrados")
+    putStrLn("[3] Excluir cliente do sistema")
+    putStrLn("[4] Calcular valor do estacionamento")
+    putStrLn("[5] Voltar ao menu principal\n")
 
 menuFinancas :: IO()
 menuFinancas = do
@@ -96,7 +91,6 @@ horaDeSaida = do
 exibirContratosAtivos :: IO()
 exibirContratosAtivos = do
     putStrLn("       -----CLIENTES COM CONTRATOS-----\n")
-
     arq <- openFile "arquivos/contratos.txt" ReadMode
     conteudo <- hGetContents arq
     putStrLn conteudo
@@ -105,7 +99,6 @@ exibirContratosAtivos = do
 exibirListaClientesCadastrados :: IO()
 exibirListaClientesCadastrados = do
     putStrLn("       -----CLIENTES CADASTRADOS-----\n")
-
     arq <- openFile "arquivos/clientes.txt" ReadMode
     conteudo <- hGetContents arq
     putStrLn conteudo
@@ -128,17 +121,13 @@ menuDono = do
 exibirListaFuncionariosCadastrados :: IO()
 exibirListaFuncionariosCadastrados = do
     putStrLn("       -----FUNCIONARIOS CADASTRADOS-----\n")
-    ---arq <- readFile "arquivos/funcionarios.txt"
-    ---let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
-    ---print lista
-
     arq <- openFile "arquivos/funcionarios.txt" ReadMode
     conteudo <- hGetContents arq
     putStrLn conteudo
     hClose arq
 
-ehFuncionario :: IO()
-ehFuncionario = do
+cpfParaLogin :: IO()
+cpfParaLogin = do
     putStr("\nInforme seu CPF para fazer o login: ")
 
 valorPago :: String -> [[String]] -> IO()

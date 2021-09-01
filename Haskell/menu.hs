@@ -6,7 +6,7 @@ import Mensagens
 
 main :: IO ()
 main = do
-	Mensagens.mensagemInicial
+	putStr("      === Bem-vindo ao ESTACIONAMENTO ===\n")
 	Mensagens.menuPrincipal
 	
 	opcao <- Util.lerEntradaString

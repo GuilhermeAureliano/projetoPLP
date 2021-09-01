@@ -4,9 +4,10 @@ import Mensagens
 import Data.List
 import System.IO
 
+--- Verifica se o CPF passado é o do dono ---
 verificaDono :: (IO()) -> IO()
 verificaDono menu = do
-    Mensagens.ehFuncionario
+    Mensagens.cpfParaLogin
     cpf <- Util.lerEntradaString
      
     arq <- readFile "arquivos/dono.txt"
@@ -17,6 +18,8 @@ verificaDono menu = do
     else do
         {Mensagens.usuarioInvalido; menu}
 
+
+--- Chama alguma função de dono após o login ---
 loginDono :: (IO()) -> IO()
 loginDono menu = do
     Mensagens.menuDono
@@ -35,8 +38,9 @@ loginDono menu = do
     else if op == "6"
         then do menu
     else do
-        {Mensagens.opcaoInvalida; loginDono menu}
+        {putStrLn("\nError: OPÇÃO INVÁLIDA\n"); loginDono menu}
 
+--- Aqui o dono tem acesso aos contratos ativos, e também ele pode alterar o valor da hora do estacionamento ---
 gerenciarFinancas :: IO()
 gerenciarFinancas = do
     Mensagens.menuFinancas
@@ -67,6 +71,7 @@ alterarValor = do
 getLinesFuncionarios :: Handle -> IO [String]
 getLinesFuncionarios h = hGetContents h >>= return . lines
 
+--- Exclusão de funcionário do sistema ---
 excluirFuncionario :: (IO()) -> IO()
 excluirFuncionario menu = do
 
@@ -89,6 +94,8 @@ excluirFuncionario menu = do
 
         putStr("\nFuncionário excluído com sucesso!\n")
 
+
+--- Cadasto de funcionário no sistema ---
 cadastrarFuncionario :: (IO()) -> IO()
 cadastrarFuncionario menu = do
     Mensagens.cadastrarNome
@@ -100,9 +107,7 @@ cadastrarFuncionario menu = do
     arq <- readFile "arquivos/funcionarios.txt"
     let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
 
-    if not (Util.ehCpfValido cpf)
-        then do {Mensagens.cpfInvalido; loginDono menu}
-    else if (Util.ehCadastrado cpf lista)
+    if (Util.ehCadastrado cpf lista)
        then do {Mensagens.usuarioCadastrado; cadastrarFuncionario menu}
     else do
         let funcionarioStr = cpf ++ "," ++ nome ++ "\n"
