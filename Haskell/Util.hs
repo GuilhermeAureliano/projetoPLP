@@ -221,6 +221,7 @@ contrato _ [] = []
 contrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) + 1))):(x !! 2):[]):contrato cpf xs
                     | otherwise = ((x !! 0):(toString ((toInt2 (x !! 1)))):(x !! 2):[]):contrato cpf xs
 
+--- Renova um contrato
 renovarContrato :: String -> [[String]] -> [[String]]
 renovarContrato _ [] = []
 renovarContrato cpf (x:xs) |  ((x !! 0) == cpf) = ((x !! 0):(toString ((toInt2 (x !! 1) * 0))):(x !! 2):[]):renovarContrato cpf xs
