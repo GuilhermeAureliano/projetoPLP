@@ -28,19 +28,59 @@ loginFuncionario menu = do
     if op == "1"
         then do {Util.reescreveVagas; loginFuncionario menu}
     else if op == "2"
-        then do {Mensagens.exibirListaClientesCadastrados; loginFuncionario menu}
+        then do {vagaOcupadaCliente; loginFuncionario menu}
     else if op == "3"
-        then do {excluirCliente menu; loginFuncionario menu}
+        then do {Mensagens.exibirListaClientesCadastrados; loginFuncionario menu}
     else if op == "4"
-        then do calcularValorEstacionamento menu
+        then do {excluirCliente menu; loginFuncionario menu}
     else if op == "5"
+        then do calcularValorEstacionamento menu
+    else if op == "6"
         then do menu
     else do
         {Mensagens.opcaoInvalida; loginFuncionario menu}
         
+--- Escolhe uma vaga das disponíveis ---
+vagaOcupadaCliente :: IO()
+vagaOcupadaCliente = do
+    putStr("\nPara continuar vai ser preciso efetuar um cadastro no sistema!\n")
+    Mensagens.informeCpf
+    cpf <- Util.lerEntradaString
+
+    arq <- readFile "arquivos/cpv.txt"
+    let lista = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq)))
+
+    arq2 <- readFile "arquivos/clientes.txt"
+    let lista2 = ((Data.List.map (Util.wordsWhen(==',') ) (lines arq2)))
+
+    if (Util.ehCadastrado cpf lista)
+        then do Mensagens.usuarioVagaOcupada
+    else if (Util.ehCadastrado cpf lista2)
+        then do
+            putStr("\nVimos que o senhor já é cadastrado! Pode continuar!\n")
+
+            Mensagens.cadastrarPlaca
+            putStr("\n")
+            placa <- Util.lerEntradaString
+            Util.escolheVaga cpf placa
+            putStr("")
+    else do
+        putStr("Informe o nome: ")
+        nome <- Util.lerEntradaString
+
+        Mensagens.cadastrarPlaca
+        placa <- Util.lerEntradaString
+
+        let clienteStr = cpf ++ "," ++ nome ++ "," ++ placa ++ "\n"
+        appendFile "arquivos/clientes.txt" (clienteStr)
+
+        Util.escolheVaga cpf placa
+    putStr("")
+
+
+
 getlines :: Handle -> IO [String]
 getlines h = hGetContents h >>= return . lines
-
 
 --- Exclusão de cliente do sistema ---
 excluirCliente :: (IO()) -> IO()

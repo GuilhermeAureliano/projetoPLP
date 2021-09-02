@@ -54,10 +54,11 @@ menuFuncionario = do
     putStrLn("\nOlá, funcionário!")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Exibir lista das vagas disponíveis")
-    putStrLn("[2] Exibir clientes cadastrados")
-    putStrLn("[3] Excluir cliente do sistema")
-    putStrLn("[4] Calcular valor do estacionamento")
-    putStrLn("[5] Voltar ao menu principal\n")
+    putStrLn("[2] Escolher vaga para um cliente")
+    putStrLn("[3] Exibir clientes cadastrados")
+    putStrLn("[4] Excluir cliente do sistema")
+    putStrLn("[5] Calcular valor do estacionamento")
+    putStrLn("[6] Voltar ao menu principal\n")
 
 menuFinancas :: IO()
 menuFinancas = do
