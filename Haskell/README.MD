@@ -5,7 +5,7 @@ Para rodar o projeto abra o terminal e rode os seguintes comandos abaixos:
 
 `git clone https://github.com/GuilhermeAureliano/projetosPLP.git`
 
-`cd projetoPLP`
+`cd projetosPLP`
 
 `cd Haskell`
 
