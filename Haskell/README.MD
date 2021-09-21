@@ -3,7 +3,7 @@ Para rodar o projeto abra o terminal e rode os seguintes comandos abaixos:
 
 `cd Desktop`
 
-`git clone https://github.com/GuilhermeAureliano/projetoPLP.git`
+`git clone https://github.com/GuilhermeAureliano/projetosPLP.git`
 
 `cd projetoPLP`
 
