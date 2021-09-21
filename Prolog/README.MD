@@ -1,1 +1,3 @@
 # Parte Lógica
+
+~~Em desenvolvimento~~
