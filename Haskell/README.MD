@@ -1,4 +1,4 @@
-# Paradigmas da Programação - parte Funcional
+# Parte Funcional
 Para rodar o projeto abra o terminal e rode os seguintes comandos abaixos:
 
 `cd Desktop`
