@@ -1,2 +1,2 @@
 loginDono:-
-    writeln("Logou no dono.").
+    menuDono.

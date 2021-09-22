@@ -1,4 +1,6 @@
-:- include('mensagens.pl').
+:-use_module(library(csv)).
+:- include("mensagens.pl").
+:- include("util.pl").
 
 loginCliente(Menu):-
     menuDoCliente,
@@ -7,22 +9,34 @@ loginCliente(Menu):-
     halt.
 
 opcoesCliente(1, Menu):- listarVagasDisponiveis, loginCliente(Menu).
-opcoesCliente(2, Menu):- escolherVaga, loginCliente(Menu).
+opcoesCliente(2, Menu):- escolherVaga(Menu), loginCliente(Menu).
 opcoesCliente(3, Menu):- recomendarVaga, loginCliente(Menu).
 opcoesCliente(4, Menu):- assinarContrato, loginCliente(Menu).
 opcoesCliente(5, Menu):- clienteComContrato, loginCliente(Menu).
 opcoesCliente(6, Menu):- Menu.
 
 %  Escolhe uma vaga das disponíveis
-escolherVaga:-
+escolherVaga(Menu):-
     writeln("\nPara continuar vai ser preciso efetuar um cadastro no sistema!\n"),
 
     informeCpf,
     read(Cpf),
+    
+    lerArquivoCsv('cpv.csv', Result),
+    ehMember(Cpf, Result, Resposta),
+    (Resposta -> usuarioVagaOcupada, loginCliente(Menu) ; write("")),    
+    
+    lerArquivoCsv('clientes.csv', Result2),
+    ehMember(Cpf, Result2, Resposta2),
+    (Resposta2 -> usuarioCadastrado, cadastrarPlaca, read(Placa),loginCliente(Menu) ; write("")),
 
-    open('dados/clientes.txt', append, Fluxo),
-    writeln(Fluxo, "Oi"),
-    close(Fluxo).
+    informeNome,
+    read(Nome),
+    cadastrarPlaca,
+    read(Placa),
+    
+    cadastrarCliente(Cpf, Nome, Placa),
+    cadastradoEfetuado.
 
 
 listarVagasDisponiveis:-
@@ -53,10 +67,7 @@ assinarContrato:-
     writeln("Qual vaga voce deseja?"),
     read(Vaga),
 
-    write("Qual o tipo de contrato? \n"),
-    write("O nosso mensal custa 150$ reais.\n"),
-    write("Ja o nosso contrato semanal custa 25$ reais.\n"),
-    write("\nQual o senhor ira assinar? [S/M] "),
+    msgAssinarContrato,
     read(Contrato).
 
 clienteComContrato:-
