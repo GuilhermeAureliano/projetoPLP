@@ -1,3 +1,4 @@
+:- include('util.pl').
 
 menuPrincipal:-
     writeln("\n           -----MENU PRINCIPAL-----"),
@@ -26,7 +27,7 @@ menuDoCliente:-
     
     
 usuarioInvalido:-
-    writeln("\nErro: usuario não cadastrado!").
+    writeln("\nErro: usuario nao cadastrado!\n").
 
 usuarioCadastrado:-
     writeln("\nUsuario ja cadastrado!").
@@ -63,10 +64,10 @@ cadastrarNome:-
     writeln("\nInforme o nome: ").
 
 informeCpf:-
-    writeln("Informe seu CPF: ").
+    writeln("Informe o CPF: ").
 
 informeNome:-
-    writeln("Informe seu nome: ").
+    writeln("Informe o nome: ").
 
 cadastrarPlaca:-
     writeln("Informe a placa do veiculo: ").
@@ -81,9 +82,11 @@ exibirContratosAtivos:-
     writeln("       -----CLIENTES COM CONTRATOS-----"),
     writeln("\nExibe os clientes com contratos do arquivo").
 
-exibirListaClientesCadastrados:-
-    writeln("       -----CLIENTES CADASTRADOS-----"),
-    writeln("\nExibe os clientes cadastrados do arquivo").
+% exibirListaClientesCadastrados:-
+%     writeln("       -----CLIENTES CADASTRADOS-----"),
+%     lerArquivoCsv('clientes.csv', Result)
+%     writeln(Result).
+
 
 menuDono:-
     writeln("\n       -----DONO-----"),

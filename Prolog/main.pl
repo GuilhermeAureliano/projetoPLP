@@ -11,7 +11,7 @@ main:-
     halt.
 
 escolheOpcao(1):- loginCliente(main).
-escolheOpcao(2):- loginFuncioanrio.
-escolheOpcao(3):- loginDono.
+escolheOpcao(2):- verificaFuncionario(main).
+escolheOpcao(3):- verificaDono(main).
 escolheOpcao(4):- halt.
 escolheOpcao(_):- opcaoInvalida, main.

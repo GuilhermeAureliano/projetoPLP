@@ -15,8 +15,23 @@ ehMember(Busca, [H|T], R):-
     (member(Busca, H) -> R = true ; ehMember(Busca, T, R)
     ).
 
+remove_member(_, [], false).
+remove_member(Busca, [H|T], R):-
+    (member(Busca, H) -> remove(Busca, H) ; remove_member(Busca, T, R)
+    ).
+
+%  Remove um elemento da lista.
+remove(X, [X|T], T).
+remove(X, [H|T], [H|T1]):- remove(X,T,T1).
+
 %  Escreve o cliente no arquivo csv.
 cadastrarCliente(Cpf, Nome, Placa):-
     open('./dados/clientes.csv', append, Fluxo),
     writeln(Fluxo, (Cpf, Nome, Placa)),
+    close(Fluxo).
+
+%  Escreve o funcionário no arquivo csv.
+cadastrarFuncionario(Cpf, Nome):-
+    open('./dados/funcionarios.csv', append, Fluxo),
+    writeln(Fluxo, (Cpf, Nome)),
     close(Fluxo).

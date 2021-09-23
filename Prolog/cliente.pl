@@ -1,6 +1,6 @@
 :-use_module(library(csv)).
-:- include("mensagens.pl").
-:- include("util.pl").
+:- include('mensagens.pl').
+:- include('util.pl').
 
 loginCliente(Menu):-
     menuDoCliente,
