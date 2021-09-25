@@ -68,6 +68,7 @@ cadastrarCpv(Cpf, Placa, Vaga, Hora, Service):-
     writeln(Fluxo, (Cpf, Placa, Vaga, Hora, Service)),
     close(Fluxo).
 
+%  Reescreve CPF, Placa, Vaga, Hora, Service no arquivo Cpvhs.
 reescreveCpvhs([]).
 reescreveCpvhs([H|T]):-
     nth0(0, H, Cpf), % Indice 1
@@ -78,11 +79,13 @@ reescreveCpvhs([H|T]):-
     cadastrarCpv(Cpf, Placa, Vaga, Hora, Service),
     reescreveCpvhs(T).
 
+
 cadastrarVaga(Vaga):-
     open('./dados/vagas.csv', append, Fluxo),
     writeln(Fluxo, (Vaga)),
     close(Fluxo).
 
+%  Reescreve a vaga ocupado pelo cliente no arquivo de vagas.
 reescreveVaga([]).
 reescreveVaga([H|T]):-
     nth0(0, H, Vaga), % Indice 0
