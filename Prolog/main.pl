@@ -4,6 +4,7 @@
 :- include('funcionario.pl').
 :- include('dono.pl').
 
+
 main:-
     menuPrincipal,
     read(Opcao),

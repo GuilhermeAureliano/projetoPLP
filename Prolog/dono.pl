@@ -18,11 +18,30 @@ loginDono(Menu):-
     halt.
 
 opcoesDono(1, Menu):- cadastroDeFuncionario(Menu), loginDono(Menu).
+opcoesDono(2, Menu):- excluirFuncionario(Menu), loginDono(Menu).
 % opcoesDono(2, Menu):- escolherVaga(Menu), loginDono(Menu).
-% opcoesDono(3, Menu):- recomendarVaga, loginDono(Menu).
 % opcoesDono(4, Menu):- assinarContrato, loginDono(Menu).
 % opcoesDono(5, Menu):- clienteComContrato, loginDono(Menu).
 opcoesDono(6, Menu):- Menu.
+
+excluirFuncionario(Menu):-
+    writeln("Informe o CPF do funcionario que deseja excluir: "),
+    read(Cpf),
+
+    % writeln("\nAtualmente temos os seguintes clientes no sistema: "),
+    % writeln(Result),
+    
+    lerArquivoCsv('funcionarios.csv', Result),
+    ehMember(Cpf, Result, Resposta),
+    (Resposta -> writeln("") ; usuarioInvalido, loginDono(Menu)),
+    
+    removegg(Cpf, Result, X),
+    remove(X, Result, FuncionariosExc),
+
+    limpaCsv('funcionarios.csv'),
+
+    reescreveFuncionario(FuncionariosExc),
+    writeln("\nFuncionario excluido com sucesso!").
 
 cadastroDeFuncionario(Menu):-
     cadastrarNome,

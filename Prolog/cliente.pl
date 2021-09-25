@@ -2,6 +2,7 @@
 :- include('mensagens.pl').
 :- include('util.pl').
 
+
 loginCliente(Menu):-
     menuDoCliente,
     read(Opcao),
@@ -22,26 +23,40 @@ escolherVaga(Menu):-
     informeCpf,
     read(Cpf),
     
-    lerArquivoCsv('cpv.csv', Result),
+    lerArquivoCsv('cpvhs.csv', Result),
     ehMember(Cpf, Result, Resposta),
     (Resposta -> usuarioVagaOcupada, loginCliente(Menu) ; write("")),    
     
     lerArquivoCsv('clientes.csv', Result2),
     ehMember(Cpf, Result2, Resposta2),
-    (Resposta2 -> usuarioCadastrado, cadastrarPlaca, read(Placa),loginCliente(Menu) ; write("")),
+    (Resposta2 -> usuarioCadastrado, cadastrarPlaca, read(Placa) ; write("")),
 
     informeNome,
     read(Nome),
     cadastrarPlaca,
     read(Placa),
     
-    cadastrarCliente(Cpf, Nome, Placa),
-    cadastradoEfetuado.
+    lerArquivoCsv('vagas.csv', Result3),
+    writeln(Result3),
+    writeln("\nQual vaga o senhor deseja?"),
+    read(Vaga),
 
+    writeln("\nDeseja adicionar servico extra de lava-jato e cera? [S/N]"),
+    read(Service),
+
+    cadastraHorarioEntrada,
+    read(Hora),
+
+    cadastrarCpv(Cpf, Placa, Vaga, Hora, Service),
+    cadastrarCliente(Cpf, Nome, Placa),
+    cadastradoEfetuado,
+    opcaoVaga(Vaga).
 
 listarVagasDisponiveis:-
     writeln("\n           -----LISTA DAS VAGAS DISPONIVEIS-----\n"),
-    writeln("exibindo lista -----").
+    lerArquivoCsv('vagas.csv', Result),
+    sort(Result, Sort),
+    writeln(Sort).
 
 recomendarVaga:-
     informeCpf,
