@@ -35,12 +35,30 @@ calcularValorEstacionamento(Menu):-
     ehMember(Cpf, Result, Resposta),
     (Resposta -> write("") ; usuarioInvalido, loginFuncionario(Menu)),
 
+    writeln("\nInforme a hora de saida do cliente: "),
+    read(HoraSaida),
+
     removegg(Cpf, Result, X),
 
+    lerArquivoCsv('valorEstacionamento.csv', ListaValorDaHora),
+    nth0(0, ListaValorDaHora, Element),
+    nth0(0, Element, ValorHora),
+    
     nth0(2, X, Vaga),
     cadastrarVaga(Vaga),
-
     remove(X, Result, CpvhsExc),
+
+    nth0(3, X, HoraEntrada),
+    nth0(4, X, Extra),
+
+    (Extra == 'S' -> Lava = 15 ; Lava = 0),
+
+    HoraFinal is (HoraSaida - HoraEntrada),
+    ValorFinal is ( (HoraFinal * ValorHora) + Lava),
+    
+    atom_concat('\nO cliente deve pagar ', ValorFinal, Resp1),
+    atom_concat(Resp1, ' reais!', Resp2),
+    writeln(Resp2),
 
     limpaCsv('cpvhs.csv'),
 

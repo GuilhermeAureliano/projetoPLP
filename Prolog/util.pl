@@ -79,6 +79,11 @@ reescreveCpvhs([H|T]):-
     cadastrarCpv(Cpf, Placa, Vaga, Hora, Service),
     reescreveCpvhs(T).
 
+cadastrarContrato(Cpf, Nome, Placa, Vaga, Tipo):-
+    open('./dados/contratos.csv', append, Fluxo),
+    writeln(Fluxo, (Cpf, Nome, Placa, Vaga, Tipo)),
+    close(Fluxo).
+
 
 cadastrarVaga(Vaga):-
     open('./dados/vagas.csv', append, Fluxo),

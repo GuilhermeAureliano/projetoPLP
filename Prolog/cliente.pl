@@ -12,7 +12,7 @@ loginCliente(Menu):-
 opcoesCliente(1, Menu):- listarVagasDisponiveis, loginCliente(Menu).
 opcoesCliente(2, Menu):- escolherVaga(Menu), loginCliente(Menu).
 opcoesCliente(3, Menu):- recomendarVaga, loginCliente(Menu).
-opcoesCliente(4, Menu):- assinarContrato, loginCliente(Menu).
+opcoesCliente(4, Menu):- assinarContrato(Menu), loginCliente(Menu).
 opcoesCliente(5, Menu):- clienteComContrato, loginCliente(Menu).
 opcoesCliente(6, Menu):- Menu.
 
@@ -64,11 +64,13 @@ recomendarVaga:-
     
     writeln("Nos recomendamos a voce a vaga: ").
 
-assinarContrato:-
+assinarContrato(Menu):-
     informeCpf,
     read(Cpf),
 
-    writeln("\nVoce ja tem contrato ativo! Tecle 5 na area do cliente para usar seu contrato!\n"),
+    lerArquivoCsv('contratos.csv', Result),
+    ehMember(Cpf, Result, Resposta),
+    (Resposta -> writeln("\nVoce ja tem contrato ativo! Tecle 5 na area do cliente para usar seu contrato!\n"), loginCliente(Menu) ; write("")), 
 
     writeln("Informe seu nome: "),
     read(Nome),
@@ -76,14 +78,17 @@ assinarContrato:-
     cadastrarPlaca,
     read(Placa),
 
-    write("       -----VAGAS DISPONIVEIS-----\n"),
-    writeln("Lista das vagas"),
+    listarVagasDisponiveis,
 
     writeln("Qual vaga voce deseja?"),
     read(Vaga),
 
     msgAssinarContrato,
-    read(Contrato).
+    read(Contrato),
+
+    cadastrarContrato(Cpf, Nome, Placa, Vaga, Contrato),
+    writeln("\nContrato assinado com sucesso!"),
+    opcaoVaga(Vaga).
 
 clienteComContrato:-
     informeCpf,

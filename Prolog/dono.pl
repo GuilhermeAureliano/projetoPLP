@@ -19,10 +19,33 @@ loginDono(Menu):-
 
 opcoesDono(1, Menu):- cadastroDeFuncionario(Menu), loginDono(Menu).
 opcoesDono(2, Menu):- excluirFuncionario(Menu), loginDono(Menu).
-% opcoesDono(2, Menu):- escolherVaga(Menu), loginDono(Menu).
+opcoesDono(3, Menu):- gerenciarFinancas(Menu), loginDono(Menu).
 % opcoesDono(4, Menu):- assinarContrato, loginDono(Menu).
 % opcoesDono(5, Menu):- clienteComContrato, loginDono(Menu).
 opcoesDono(6, Menu):- Menu.
+
+
+gerenciarFinancas(Menu):-
+    menuFinancas,
+    read(Op),
+
+    opcoesFinancas(Op, Menu).
+
+opcoesFinancas(2, Menu):- alterarValor, gerenciarFinancas(Menu).
+opcoesFinancas(3, Menu):- loginDono(Menu).
+
+alterarValor:-
+    writeln("\nQual o novo valor da hora do estacionamento?"),
+    read(NewValue),
+
+    limpaCsv('valorEstacionamento.csv'),
+
+    open('./dados/valorEstacionamento.csv', append, Fluxo),
+    writeln(Fluxo, (NewValue)),
+    close(Fluxo),
+
+    writeln("\nValor do estacionamento alterado com sucesso!").
+
 
 excluirFuncionario(Menu):-
     writeln("Informe o CPF do funcionario que deseja excluir: "),

@@ -53,7 +53,7 @@ menuFuncionario:-
 
 menuFinancas:-
     writeln("\n       -----AREA DE FINANCAS-----"),
-    writeln("Como deseja prosseguir?"),
+    writeln("\nComo deseja prosseguir?"),
 
     writeln("[1] Visualizar contratos ativos"), 
     writeln("[2] Alterar valor da hora do estacionamento"), 
