@@ -11,9 +11,9 @@ loginCliente(Menu):-
 
 opcoesCliente(1, Menu):- listarVagasDisponiveis, loginCliente(Menu).
 opcoesCliente(2, Menu):- escolherVaga(Menu), loginCliente(Menu).
-opcoesCliente(3, Menu):- recomendarVaga, loginCliente(Menu).
+opcoesCliente(3, Menu):- recomendarVaga, loginCliente(Menu). % Falta
 opcoesCliente(4, Menu):- assinarContrato(Menu), loginCliente(Menu).
-opcoesCliente(5, Menu):- clienteComContrato, loginCliente(Menu).
+opcoesCliente(5, Menu):- contratosDosClientes(Menu), loginCliente(Menu). % Falta
 opcoesCliente(6, Menu):- Menu.
 
 %  Escolhe uma vaga das disponíveis
@@ -88,11 +88,25 @@ assinarContrato(Menu):-
 
     cadastrarContrato(Cpf, Nome, Placa, Vaga, Contrato),
     writeln("\nContrato assinado com sucesso!"),
-    opcaoVaga(Vaga).
+    opcaoVaga(Vaga),
 
-clienteComContrato:-
+    cadastrarUsoDoContrato(Cpf, 0, Contrato).
+
+contratosDosClientes(Menu):-
     informeCpf,
     read(Cpf),
 
-    writeln("\nAtualmente temos os seguintes clientes ativos e suas respectivas vagas: "),
-    writeln("Lista das vagas....").
+    lerArquivoCsv('usoDoContrato.csv', Result),
+    ehMember(Cpf, Result, Resposta),
+    (Resposta -> writeln("") ; writeln("\nO senhor nao tem contrato ativo!\n"), loginCliente(Menu)), 
+
+    writeln("\nBem-vindo de volta! O senhor estara usando seu contrato!"),
+    removegg(Cpf, Result, Lista),
+    (renovacaoDeContrato(Lista) -> writeln("\nSeu contrato acabou! Deseja renovar? [s/n]"), read(Renova) ; writeln("")),
+
+    lerArquivoCsv('contratos.csv', Result2),
+    (Renova == 's' -> limpaCsv('usoDoContrato.csv'), reescreveRenovacao(Result, Cpf) ; excluirUsoDoContrato(Cpf, Result), excluirContratos(Cpf, Result2)).
+
+    % limpaCsv('usoDoContrato.csv'),
+    % reescreveUsoContrato(Result, Cpf).
+

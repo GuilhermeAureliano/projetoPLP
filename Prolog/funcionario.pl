@@ -51,7 +51,7 @@ calcularValorEstacionamento(Menu):-
     nth0(3, X, HoraEntrada),
     nth0(4, X, Extra),
 
-    (Extra == 'S' -> Lava = 15 ; Lava = 0),
+    (Extra == 's' -> Lava = 15 ; Lava = 0),
 
     HoraFinal is (HoraSaida - HoraEntrada),
     ValorFinal is ( (HoraFinal * ValorHora) + Lava),

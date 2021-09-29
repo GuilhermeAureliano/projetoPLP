@@ -19,11 +19,9 @@ ehMember(Busca, [H|T], R):-
     ).
 
 %  Remove um elemento da lista.
-% remove_member(_, [], []).
 removegg(_, [], []).
 removegg(Cpf, [H|T], C):- (member(Cpf, H) -> C = H; removegg(Cpf, T, C)).
 
-% [[666,gui,gui66],[1212,gus,gus12],[555,lucas,lcd]]
 remove(X, [X|T], T).
 remove(X, [H|T], [H|T1]):- remove(X,T,T1).
 
@@ -79,6 +77,31 @@ reescreveCpvhs([H|T]):-
     cadastrarCpv(Cpf, Placa, Vaga, Hora, Service),
     reescreveCpvhs(T).
 
+%  Reescreve CPF e quantidade de uso da vaga no arquivo csv.
+reescreveUsoContrato([], _).
+reescreveUsoContrato([H|T], Busca):-
+    nth0(0, H, Cpf), % Indice 1
+    nth0(1, H, Qntd), % Indice 2
+    (Busca =:= Cpf -> NewQntd is Qntd + 1 ; NewQntd = Qntd),
+    cadastrarUsoDoContrato(Cpf, NewQntd),
+    reescreveUsoContrato(T, Busca).
+
+reescreveRenovacao([], _).
+reescreveRenovacao([H|T], Busca):-
+    nth0(0, H, Cpf), % Indice 1
+    nth0(1, H, Qntd), % Indice 2
+    nth0(2, H, Tipo), % Indice 3
+    (Busca =:= Cpf -> NewQntd = 0 ; NewQntd = Qntd),
+    cadastrarUsoDoContrato(Cpf, NewQntd, Tipo),
+    reescreveRenovacao(T, Busca).
+
+
+%  Escreve no arquivos os dados passados.
+cadastrarUsoDoContrato(Cpf, Qntd, Tipo):-
+    open('./dados/usoDoContrato.csv', append, Fluxo),
+    writeln(Fluxo, (Cpf, Qntd, Tipo)),
+    close(Fluxo).
+
 cadastrarContrato(Cpf, Nome, Placa, Vaga, Tipo):-
     open('./dados/contratos.csv', append, Fluxo),
     writeln(Fluxo, (Cpf, Nome, Placa, Vaga, Tipo)),
@@ -104,7 +127,46 @@ opcaoVaga(Vaga):-
     
     removegg(Vaga, Result, X),
     remove(X, Result, VagasExc),
-
+    
     limpaCsv('vagas.csv'),
-
+    
     reescreveVaga(VagasExc).
+
+renovacaoDeContrato(Lista):-
+    nth0(1, Lista, Qntd),
+    nth0(2, Lista, Tipo),
+    
+    (Tipo == 's', Qntd =:= 7  -> true ; (Tipo == 'm', Qntd =:= 30 -> true ; false)).
+
+
+reescreveContrato([]).
+reescreveContrato([H|T]):-
+    nth0(0, H, Cpf), % Indice 1
+    nth0(1, H, Qntd), % Indice 2
+    nth0(2, H, Tipo), % Indice 3
+    cadastrarUsoDoContrato(Cpf, Qntd, Tipo),
+    reescreveContrato(T).
+
+reescreveContrato2([]).
+reescreveContrato2([H|T]):-
+    nth0(0, H, Cpf), % Indice 1
+    nth0(1, H, Nome), % Indice 2
+    nth0(2, H, Placa), % Indice 3
+    nth0(3, H, Vaga), % Indice 3
+    nth0(4, H, Tipo), % Indice 3
+    cadastrarContrato(Cpf, Nome, Placa, Vaga, Tipo),
+    reescreveContrato2(T).
+
+excluirUsoDoContrato(Cpf, Result):-
+    
+    removegg(Cpf, Result, X),
+    remove(X, Result, ContratosExc),
+    limpaCsv('usoDoContrato.csv'),
+    reescreveContrato(ContratosExc).
+
+excluirContratos(Cpf2, Result2):-
+
+    removegg(Cpf2, Result2, X2),
+    remove(X2, Result2, ContratosExc2),
+    limpaCsv('contratos.csv'),
+    reescreveContrato2(ContratosExc2).
