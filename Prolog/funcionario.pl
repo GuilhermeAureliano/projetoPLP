@@ -86,10 +86,10 @@ escolherVaga(Menu):-
     
     lerArquivoCsv('vagas.csv', Result3),
     writeln(Result3),
-    writeln("\nQual vaga o senhor deseja?"),
+    writeln("\nQual vaga o cliente deseja?"),
     read(Vaga),
 
-    writeln("\nDeseja adicionar servico extra de lava-jato e cera? [S/N]"),
+    writeln("\nVai adicionar servico extra de lava-jato e cera? [S/N]"),
     read(Service),
 
     cadastraHorarioEntrada,

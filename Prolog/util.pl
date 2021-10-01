@@ -169,3 +169,53 @@ reescreveContrato2([H|T]):-
     nth0(4, H, Tipo), % Indice 3
     cadastrarContrato(Cpf, Nome, Placa, Vaga, Tipo),
     reescreveContrato2(T).
+
+%  Retorna o maior elemento de uma lista.
+maior_lista([R],R).
+maior_lista([C|L],R) :- maior_lista(L,A), (A > C -> R = A; R = C).
+
+%  Corta uma lista a partir do índice passado como parâmetro.
+geraL(_, 11, []).
+geraL(L, I, [H|T]):- 
+    nth0(I, L, El),
+    H = El,
+    NewI is I+1,
+    geraL(L, NewI, T).
+
+%  Retorna o índice do maior elemento passado como parâmetro.
+pegaIndice(L, I, Maior, R):-
+    nth0(I, L, P),
+    (Maior =:= P -> R = I, !; NewI is I+1, pegaIndice(L, NewI, Maior, R)).
+
+
+cadastrarRecomendacao(Cpf, NewI1, NewI2, NewI3, NewI4, NewI5, NewI6, NewI7, NewI8, NewI9, NewI10):-
+    open('./dados/recomendacao.csv', append, Fluxo),
+    writeln(Fluxo, (Cpf, NewI1, NewI2, NewI3, NewI4, NewI5, NewI6, NewI7, NewI8, NewI9, NewI10)),
+    close(Fluxo).
+
+reescreveRecomendacao([], _, _).
+reescreveRecomendacao([H|T], I, Busca):-
+    NewI = I,
+    nth0(0, H, Cpf), % Indice 1
+    nth0(1, H, I1), % Indice 2
+    (1 =:= NewI -> (Cpf =:= Busca -> NewI1 is I1 + 1 ; NewI1 = I1) ; NewI1 = I1),
+    nth0(2, H, I2), % Indice 3
+    (2 =:= NewI -> (Cpf =:= Busca -> NewI2 is I2 + 1 ; NewI2 = I2) ; NewI2 = I2),
+    nth0(3, H, I3), % Indice 3
+    (3 =:= NewI -> (Cpf =:= Busca -> NewI3 is I3 + 1 ; NewI3 = I3) ; NewI3 = I3),
+    nth0(4, H, I4), % Indice 3
+    (4 =:= NewI -> (Cpf =:= Busca -> NewI4 is I4 + 1 ; NewI4 = I4) ; NewI4 = I4),
+    nth0(5, H, I5), % Indice 3
+    (5 =:= NewI -> (Cpf =:= Busca -> NewI5 is I5 + 1 ; NewI5 = I5) ; NewI5 = I5),
+    nth0(6, H, I6), % Indice 3
+    (6 =:= NewI -> (Cpf =:= Busca -> NewI6 is I6 + 1 ; NewI6 = I6) ; NewI6 = I6),
+    nth0(7, H, I7), % Indice 3
+    (7 =:= NewI -> (Cpf =:= Busca -> NewI7 is I7 + 1 ; NewI7 = I7) ; NewI7 = I7),
+    nth0(8, H, I8), % Indice 3
+    (8 =:= NewI -> (Cpf =:= Busca -> NewI8 is I8 + 1 ; NewI8 = I8) ; NewI8 = I8),
+    nth0(9, H, I9), % Indice 3
+    (9 =:= NewI -> (Cpf =:= Busca -> NewI9 is I9 + 1 ; NewI9 = I9) ; NewI9 = I9),
+    nth0(10, H, I10), % Indice 3
+    (10 =:= NewI -> (Cpf =:= Busca -> NewI10 is I10 + 1 ; NewI10 = I10) ; NewI10 = I10),
+    cadastrarRecomendacao(Cpf, NewI1, NewI2, NewI3, NewI4, NewI5, NewI6, NewI7, NewI8, NewI9, NewI10),
+    reescreveRecomendacao(T, I, Busca).

@@ -20,8 +20,8 @@ loginDono(Menu):-
 opcoesDono(1, Menu):- cadastroDeFuncionario(Menu), loginDono(Menu).
 opcoesDono(2, Menu):- excluirFuncionario(Menu), loginDono(Menu).
 opcoesDono(3, Menu):- gerenciarFinancas(Menu), loginDono(Menu).
-% opcoesDono(4, Menu):- assinarContrato, loginDono(Menu).
-% opcoesDono(5, Menu):- clienteComContrato, loginDono(Menu).
+opcoesDono(4, Menu):- exibirListaFuncionariosCadastrados, loginDono(Menu).
+opcoesDono(5, Menu):- exibirClientes, loginDono(Menu).
 opcoesDono(6, Menu):- Menu.
 
 

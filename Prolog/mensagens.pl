@@ -103,7 +103,8 @@ menuDono:-
 
 exibirListaFuncionariosCadastrados:-
     writeln("       -----FUNCIONARIOS CADASTRADOS-----"),
-    writeln("\nLista dos FUNCIONARIOS cadastrado do arquivo").
+    lerArquivoCsv('funcionarios.csv', Lists),
+    writeln(Lists).
 
 cpfParaLogin:-
     writeln("\nInforme seu CPF para fazer o login: ").

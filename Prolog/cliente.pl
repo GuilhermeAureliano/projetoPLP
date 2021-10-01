@@ -11,7 +11,7 @@ loginCliente(Menu):-
 
 opcoesCliente(1, Menu):- listarVagasDisponiveis, loginCliente(Menu).
 opcoesCliente(2, Menu):- escolherVaga(Menu), loginCliente(Menu).
-opcoesCliente(3, Menu):- recomendarVaga, loginCliente(Menu). % Falta
+opcoesCliente(3, Menu):- recomendarVaga(Menu), loginCliente(Menu). % Falta
 opcoesCliente(4, Menu):- assinarContrato(Menu), loginCliente(Menu).
 opcoesCliente(5, Menu):- contratosDosClientes(Menu), loginCliente(Menu). % Falta
 opcoesCliente(6, Menu):- Menu.
@@ -29,15 +29,14 @@ escolherVaga(Menu):-
     
     lerArquivoCsv('clientes.csv', Result2),
     ehMember(Cpf, Result2, Resposta2),
-    (Resposta2 -> usuarioCadastrado, cadastrarPlaca, read(Placa) ; write("")),
+    (Resposta2 -> usuarioCadastrado, writeln("\nVamos escolher sua vaga!") ; write("")),
 
     informeNome,
     read(Nome),
     cadastrarPlaca,
     read(Placa),
     
-    lerArquivoCsv('vagas.csv', Result3),
-    writeln(Result3),
+    listarVagasDisponiveis,
     writeln("\nQual vaga o senhor deseja?"),
     read(Vaga),
 
@@ -50,19 +49,36 @@ escolherVaga(Menu):-
     cadastrarCpv(Cpf, Placa, Vaga, Hora, Service),
     cadastrarCliente(Cpf, Nome, Placa),
     cadastradoEfetuado,
-    opcaoVaga(Vaga).
+    opcaoVaga(Vaga),
+
+    lerArquivoCsv('recomendacao.csv', ListaRec),
+    ehMember(Cpf, ListaRec, RespostaRec),
+    (RespostaRec -> limpaCsv('recomendacao.csv'), reescreveRecomendacao(ListaRec, Vaga, Cpf) ; cadastrarRecomendacao(Cpf, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), lerArquivoCsv('recomendacao.csv', ListaLida), limpaCsv('recomendacao.csv'), reescreveRecomendacao(ListaLida, Vaga, Cpf)).
+
+
+
+recomendarVaga(Menu):-
+    informeCpf,
+    read(Cpf),
+    
+    lerArquivoCsv('recomendacao.csv', Result),
+    ehMember(Cpf, Result, Resposta),
+    (Resposta -> writeln("true") ; usuarioInvalido, loginCliente(Menu)),
+    
+    removegg(Cpf, Result, Lista),
+    geraL(Lista, 1, R),
+    maior_lista(R, S),
+    pegaIndice(Lista, 1, S, M),
+    writeln("De acordo com seu historico previo..."),
+    write("Nos recomendamos a voce a vaga: "),
+    writeln(M).
+
 
 listarVagasDisponiveis:-
     writeln("\n           -----LISTA DAS VAGAS DISPONIVEIS-----\n"),
     lerArquivoCsv('vagas.csv', Result),
     sort(Result, Sort),
     writeln(Sort).
-
-recomendarVaga:-
-    informeCpf,
-    read(Cpf),
-    
-    writeln("Nos recomendamos a voce a vaga: ").
 
 assinarContrato(Menu):-
     informeCpf,
