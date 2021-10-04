@@ -123,6 +123,3 @@ contratosDosClientes(Menu):-
     lerArquivoCsv('contratos.csv', Result2),
     (Renova == 's' -> limpaCsv('usoDoContrato.csv'), reescreveRenovacao(Result, Cpf) ; excluirUsoDoContrato(Cpf, Result), excluirContratos(Cpf, Result2)).
 
-    % limpaCsv('usoDoContrato.csv'),
-    % reescreveUsoContrato(Result, Cpf).
-

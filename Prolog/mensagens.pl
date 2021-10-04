@@ -78,16 +78,6 @@ cadastraHorarioEntrada:-
 horaDeSaida:-
     writeln("Hora de saida: ").
 
-exibirContratosAtivos:-
-    writeln("       -----CLIENTES COM CONTRATOS-----"),
-    writeln("\nExibe os clientes com contratos do arquivo").
-
-% exibirListaClientesCadastrados:-
-%     writeln("       -----CLIENTES CADASTRADOS-----"),
-%     lerArquivoCsv('clientes.csv', Result)
-%     writeln(Result).
-
-
 menuDono:-
     writeln("\n       -----DONO-----"),
     writeln("\nOi, chefinho!"),
@@ -108,10 +98,6 @@ exibirListaFuncionariosCadastrados:-
 
 cpfParaLogin:-
     writeln("\nInforme seu CPF para fazer o login: ").
-
-% valorPago :: String -> [[String]] -> IO()
-valorPago:-
-    writeln("\nO valor a ser pago em REAIS pelo cliente NOME é: ").
 
 cadastradoEfetuado:-
     writeln("\nCADASTRADO EFETUADO COM SUCESSO!").

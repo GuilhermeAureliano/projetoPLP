@@ -31,8 +31,15 @@ gerenciarFinancas(Menu):-
 
     opcoesFinancas(Op, Menu).
 
+opcoesFinancas(1, Menu):- exibirContratosAtivos, gerenciarFinancas(Menu).
 opcoesFinancas(2, Menu):- alterarValor, gerenciarFinancas(Menu).
 opcoesFinancas(3, Menu):- loginDono(Menu).
+
+exibirContratosAtivos:-
+    writeln("\n       -----CONTRATOS ATIVOS-----\n"),
+
+    lerArquivoCsv('contratos.csv', Result),
+    writeln(Result).
 
 alterarValor:-
     writeln("\nQual o novo valor da hora do estacionamento?"),
@@ -51,9 +58,6 @@ excluirFuncionario(Menu):-
     writeln("Informe o CPF do funcionario que deseja excluir: "),
     read(Cpf),
 
-    % writeln("\nAtualmente temos os seguintes clientes no sistema: "),
-    % writeln(Result),
-    
     lerArquivoCsv('funcionarios.csv', Result),
     ehMember(Cpf, Result, Resposta),
     (Resposta -> writeln("") ; usuarioInvalido, loginDono(Menu)),
