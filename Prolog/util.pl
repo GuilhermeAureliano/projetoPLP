@@ -81,10 +81,11 @@ reescreveCpvhs([H|T]):-
 %  Aumenta 1 na quantidade de uso do contrato.
 reescreveUsoContrato([], _).
 reescreveUsoContrato([H|T], Busca):-
-    nth0(0, H, Cpf), % Indice 1
-    nth0(1, H, Qntd), % Indice 2
+    nth0(0, H, Cpf), % Indice 0
+    nth0(1, H, Qntd), % Indice 1
+    nth0(2, H, Tipo), % Indice 2
     (Busca =:= Cpf -> NewQntd is Qntd + 1 ; NewQntd = Qntd),
-    cadastrarUsoDoContrato(Cpf, NewQntd),
+    cadastrarUsoDoContrato(Cpf, NewQntd, Tipo),
     reescreveUsoContrato(T, Busca).
 
 %  Zera a quantidade de uso do contrato do cliente.

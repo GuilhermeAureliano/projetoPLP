@@ -118,8 +118,13 @@ contratosDosClientes(Menu):-
 
     writeln("\nBem-vindo de volta! O senhor estara usando seu contrato!"),
     removegg(Cpf, Result, Lista),
-    (renovacaoDeContrato(Lista) -> writeln("\nSeu contrato acabou! Deseja renovar? [s/n]"), read(Renova) ; writeln("")),
+
+    lerArquivoCsv('contratos.csv', Result3),
+    removegg(Cpf, Result3, Lista3),
+    nth0(3, Lista3, Vaga),
+
+    (renovacaoDeContrato(Lista) -> writeln("\nSeu contrato acabou! Deseja renovar? [s/n]"), read(Renova) ; limpaCsv('usoDoContrato.csv'), reescreveUsoContrato(Result, Cpf), loginCliente(Menu)),
+
 
     lerArquivoCsv('contratos.csv', Result2),
-    (Renova == 's' -> limpaCsv('usoDoContrato.csv'), reescreveRenovacao(Result, Cpf) ; excluirUsoDoContrato(Cpf, Result), excluirContratos(Cpf, Result2)).
-
+    (Renova == 's' -> limpaCsv('usoDoContrato.csv'), reescreveRenovacao(Result, Cpf) ; excluirUsoDoContrato(Cpf, Result), excluirContratos(Cpf, Result2), cadastrarVaga(Vaga)).
