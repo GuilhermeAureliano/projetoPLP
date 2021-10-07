@@ -11,9 +11,9 @@ loginCliente(Menu):-
 
 opcoesCliente(1, Menu):- listarVagasDisponiveis, loginCliente(Menu).
 opcoesCliente(2, Menu):- escolherVaga(Menu), loginCliente(Menu).
-opcoesCliente(3, Menu):- recomendarVaga(Menu), loginCliente(Menu). % Falta
+opcoesCliente(3, Menu):- recomendarVaga(Menu), loginCliente(Menu). 
 opcoesCliente(4, Menu):- assinarContrato(Menu), loginCliente(Menu).
-opcoesCliente(5, Menu):- contratosDosClientes(Menu), loginCliente(Menu). % Falta
+opcoesCliente(5, Menu):- contratosDosClientes(Menu), loginCliente(Menu). 
 opcoesCliente(6, Menu):- Menu.
 
 %  Escolhe uma vaga das disponíveis
